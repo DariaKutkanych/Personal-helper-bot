@@ -1,10 +1,16 @@
+# TODO Cохранять контакты с именами, адресами, номерами телефонов, email и днями рождения в книгу контактов;
+   
 from collections import UserDict
+from datetime import datetime
 
 
 class AddressBook(UserDict):
 
     def __init__(self):
         pass
+
+    def add_record(self,set):
+        self.data.__setitem__(set.name, (set.adresses, set.phones, set.emails, set.birthday))
 
 
 class Field:
@@ -25,24 +31,61 @@ class Field:
 
 
 class Name(Field):
-    pass
+    def __init__(self, n):
+        self.name = n
 
 
 class Phone(Field):
-    pass
-
+    def __init__(self, phone = None):
+        self.phone = phone
 
 class Birthday(Field):
-    pass
+     def __init__(self, birthday_y = None, birthday_m = None, birthday_d = None,):
+        self.birthday = datetime (birthday_y, birthday_m, birthday_d)
+
+
+class Adress(Field):
+    def __init__(self, adress = None):
+        self.adress = adress
+
+class Email (Field):
+    def __init__(self, mail = None):
+        self.email = mail
 
 
 class Record:
-    pass
+    def __init__(self, name, adress = None, phone = None, email = None, birthday = None):
+        self.name = name
+        self.adresses = []
+        self.phones = []
+        self.emails = []
+        self.birthday = birthday
+        if phone:
+            self.phones.append(phone)
+        if adress:
+            self.adresses.append(adress)
+        if email:
+            self.emails.append(email)
+
+    def add_adress(self, adress):
+        self.adresses.append(adress)
+        print(f"for {self.name} add adress {adress}.")
+
+    def add_phone(self, phone):
+        self.phones.append(phone)
+        print(f"for {self.name} add phone {phone}.")
+
+    def add_mail(self, mail):
+        self.emails.append(mail)
+        print(f"for {self.name} add mail {mail}.")
+
+    def add_birthday(self, bd):
+        self.birthday = bd
+        print(f"{self.name} was born {bd}.")
 
 
 class Notes:
     pass
-
 
 class Bot:
 
