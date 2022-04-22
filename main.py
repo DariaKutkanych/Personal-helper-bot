@@ -1,4 +1,5 @@
 from collections import UserDict
+from prettytable.colortable import ColorTable, Themes
 
 
 class AddressBook(UserDict):
@@ -44,6 +45,43 @@ class Notes:
     pass
 
 
+class Menu:
+
+    @property
+    def main_menu(self):
+        show_menu = ColorTable(theme=Themes.OCEAN)
+        show_menu.field_names = [f"{18 * '-'}Меню{18 * '-'}"]
+        show_menu.hrules = 1
+        show_menu.align = "c"
+        show_menu.add_rows([["1. Добавити новий контакт"],
+                            ["2. Добавити дані до існуючого контакту"],
+                            ["3. Видалити дані з контакту"],
+                            ["4. Змінити дані контакту"],
+                            ["5. Іменниники"],
+                            ["6. Посторінковий вивід контактної книги"],
+                            ["7. Пошук по контактній книзі"],
+                            ["8. Показати всі контакти"],
+                            ["9. Нотатки"],
+                            ["10. Сортувати папку"],
+                            ["11. Вихід"],
+                            ])
+        return show_menu
+
+    @property
+    def delete_menu(self):
+        show_delete = ColorTable(theme=Themes.OCEAN)
+        show_delete.field_names = [f"{18 * '-'}Що будем видаляти?{18 * '-'}"]
+        show_delete.hrules = 1
+        show_delete.align = "l"
+        show_delete.add_rows([["1. Телефон"],
+                              ["2. Емейл"],
+                              ["3. Адресу"],
+                              ["4. День народження"],
+                              ["5. Видалити контакт з книги"],
+                              ["6. Повернутись в попереднє меню"]])
+        return show_delete
+
+
 class Bot:
 
     def __init__(self):
@@ -51,15 +89,16 @@ class Bot:
         self.Adderessbook = AddressBook()
         self.notes = []  # a func add_note should create an instance of Note
         # and add it to current list
-        self.menu = "Hello guys! Lets get it started"  # should be changed
+        self.menu = Menu()  # should be changed
 
-        print(self.menu)
+        print(self.menu.main_menu)
 
         while True:
 
             command = input("I am waiting for your command: ")
 
-            if command == "exit" or command == "15":
+            #добавлені правки по умовах виходу з циклу
+            if command.lower() in ["exit", "close", "good bye", "11", "вихід", "выход"]:
                 print("Good bye!")
                 break
             else:
