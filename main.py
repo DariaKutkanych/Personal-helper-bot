@@ -52,8 +52,8 @@ class Menu:
         show_menu = ColorTable(theme=Themes.OCEAN)
         show_menu.field_names = [f"{18 * '-'}Меню{18 * '-'}"]
         show_menu.hrules = 1
-        show_menu.align = "c"
-        show_menu.add_rows([["1. Добавити новий контакт"],
+        show_menu.align = "l"
+        show_menu.add_rows([["1. Створити новий контакт"],
                             ["2. Добавити дані до існуючого контакту"],
                             ["3. Видалити дані з контакту"],
                             ["4. Змінити дані контакту"],
@@ -81,6 +81,32 @@ class Menu:
                               ["6. Повернутись в попереднє меню"]])
         return show_delete
 
+    @property
+    def add_menu(self):
+        show_add_contact = ColorTable(theme=Themes.OCEAN)
+        show_add_contact.field_names = [f"{18 * '-'}Що будем добавляти?{18 * '-'}"]
+        show_add_contact.hrules = 1
+        show_add_contact.align = "l"
+        show_add_contact.add_rows([["1. Телефон"],
+                              ["2. Емейл"],
+                              ["3. Адресу"],
+                              ["4. День народження"],
+                              ["5. Повернутись в попереднє меню"]])
+        return show_add_contact
+
+    @property
+    def change_menu(self):
+        show_change_contact = ColorTable(theme=Themes.OCEAN)
+        show_change_contact.field_names = [f"{18 * '-'}Що будем змінювати?{18 * '-'}"]
+        show_change_contact.hrules = 1
+        show_change_contact.align = "l"
+        show_change_contact.add_rows([["1. Телефон"],
+                                   ["2. Емейл"],
+                                   ["3. Адресу"],
+                                   ["4. День народження"],
+                                   ["5. Повернутись в попереднє меню"]])
+        return show_change_contact
+
 
 class Bot:
 
@@ -91,19 +117,13 @@ class Bot:
         # and add it to current list
         self.menu = Menu()  # should be changed
 
-        print(self.menu.main_menu)
-
         while True:
-
+            print(self.menu.main_menu)
             command = input("I am waiting for your command: ")
 
-            #добавлені правки по умовах виходу з циклу
             if command.lower() in ["exit", "close", "good bye", "11", "вихід", "выход"]:
                 print("Good bye!")
                 break
-            else:
-                # carrying should fulfil the command
-                pass
 
     def sort_files(self, file_name):
         # external sort func should be imported
