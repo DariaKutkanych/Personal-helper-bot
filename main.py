@@ -1,5 +1,6 @@
 from collections import UserDict
 from prettytable.colortable import ColorTable, Themes
+import re
 
 
 class AddressBook(UserDict):
@@ -30,11 +31,44 @@ class Name(Field):
 
 
 class Phone(Field):
-    pass
+
+    def __init__(self, phone=None):
+        self.phone = phone
+
+    @property
+    def phone(self):
+        return self.phone
+
+    @phone.setter
+    def phone(self, new_value):
+        if len(list(new_value)) >= 11:
+            self.phone = new_value
+        else:
+            print('\033[31m' + 'Номер не додано! Номер повинен містити не меньше 11 цифр')
+            return
 
 
 class Birthday(Field):
     pass
+
+
+class Email(Field):
+
+    def __init__(self, mail=None):
+        self.email = mail
+
+    @property
+    def email(self):
+        return self.email
+
+    @email.setter
+    def email(self, add_value):
+        regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
+        if (re.search(regex, add_value)):
+            self.email = add_value
+        else:
+            print("\033[31m" + "Емейл не доданий не коректний формат! Формат excample@mail.com")
+            return
 
 
 class Record:
