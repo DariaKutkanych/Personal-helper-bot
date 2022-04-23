@@ -75,7 +75,7 @@ class Bot:
         self.address_book = AddressBook()
         self.notes_book = NotesBook()
         #self.notes = []  # a func add_note should create an instance of Note
-        # and add it to current list.
+        # and add it to current list
         self.menu = "Hello guys! Lets get it started"  # should be changed
 
         print(self.menu)
