@@ -3,12 +3,6 @@ from prettytable.colortable import ColorTable, Themes
 import re
 
 
-class AddressBook(UserDict):
-
-    def __init__(self):
-        pass
-
-
 class Field:
 
     def __init__(self, value):
@@ -75,8 +69,38 @@ class Record:
     pass
 
 
-class Notes:
+class Note(Field):
     pass
+
+
+class NotesBook(UserDict):
+
+    def __init__(self):
+        self.data = []
+
+    def add_note(self, note: Note):
+        added_note = {'id': '', 'tag': '', 'note': note}
+        self.data.append(added_note)
+
+    def print_menu(self): # this def will change, when we will have finish menu
+        while True:
+            command = input('''Do you want create notes or check?
+                            Create: enter 1 or create
+                            Check: enter 2 or check
+                            If you need exit, enter exit or 0\n''').lower()
+            if command == '1' or command == 'create':
+                note = Note(input('Enter your notes: '))
+                self.add_note(note)
+            elif command == '2' or command == 'check':
+                print(self.data)
+            elif command == '0' or command == 'exit':
+                break
+
+
+class AddressBook(UserDict):
+
+    def __init__(self):
+        pass
 
 
 class Menu:
@@ -146,7 +170,7 @@ class Bot:
 
     def __init__(self):
 
-        self.Adderessbook = AddressBook()
+        self.addressbook = AddressBook()
         self.notes = []  # a func add_note should create an instance of Note
         # and add it to current list
         self.menu = Menu()  # should be changed
@@ -157,7 +181,9 @@ class Bot:
 
             if command.lower() in ["exit", "close", "good bye", "11", "вихід", "выход"]:
                 print("Good bye!")
-                break
+
+            elif command == "note" or command == "14":  #number may be change
+                self.notes_book.print_menu()
 
     def sort_files(self, file_name):
         # external sort func should be imported
