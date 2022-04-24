@@ -12,7 +12,8 @@ class AddressBook(UserDict):
 class Field:
 
     def __init__(self, value):
-        self.__value = value
+        self.__value = Name
+        self.value = value
 
     def __repr__(self):
         return f"{self.__value}"
@@ -44,7 +45,8 @@ class Phone(Field):
         if len(list(new_value)) >= 11:
             self.phone = new_value
         else:
-            print('\033[31m' + 'Номер не додано! Номер повинен містити не меньше 11 цифр')
+            print(
+                '\033[31m' + 'Номер не додано! Номер повинен містити не меньше 11 цифр')
             return
 
 
@@ -67,7 +69,8 @@ class Email(Field):
         if (re.search(regex, add_value)):
             self.email = add_value
         else:
-            print("\033[31m" + "Емейл не доданий не коректний формат! Формат excample@mail.com")
+            print(
+                "\033[31m" + "Емейл не доданий не коректний формат! Формат excample@mail.com")
             return
 
 
@@ -77,6 +80,30 @@ class Record:
 
 class Notes:
     pass
+
+
+class NotesBook(UserDict):
+
+    def __init__(self):
+        self.data = []
+
+    def add_note(self, note: Note):
+        added_note = {'id': '', 'tag': '', 'note': note}
+        self.data.append(added_note)
+
+    def print_menu(self):
+        while True:
+            command = input('''Do you want create notes or check?
+                            Create: enter 1 or create
+                            Check: enter 2 or check
+                            If you need exit, enter exit or 0\n''').lower()
+            if command == '1' or command == 'create':
+                note = Note(input('Enter your notes: '))
+                self.add_note(note)
+            elif command == '2' or command == 'check':
+                print(self.data)
+            elif command == '0' or command == 'exit':
+                break
 
 
 class Menu:
@@ -118,27 +145,29 @@ class Menu:
     @property
     def add_menu(self):
         show_add_contact = ColorTable(theme=Themes.OCEAN)
-        show_add_contact.field_names = [f"{18 * '-'}Що будем добавляти?{18 * '-'}"]
+        show_add_contact.field_names = [
+            f"{18 * '-'}Що будем добавляти?{18 * '-'}"]
         show_add_contact.hrules = 1
         show_add_contact.align = "l"
         show_add_contact.add_rows([["1. Телефон"],
-                              ["2. Емейл"],
-                              ["3. Адресу"],
-                              ["4. День народження"],
-                              ["5. Повернутись в попереднє меню"]])
+                                   ["2. Емейл"],
+                                   ["3. Адресу"],
+                                   ["4. День народження"],
+                                   ["5. Повернутись в попереднє меню"]])
         return show_add_contact
 
     @property
     def change_menu(self):
         show_change_contact = ColorTable(theme=Themes.OCEAN)
-        show_change_contact.field_names = [f"{18 * '-'}Що будем змінювати?{18 * '-'}"]
+        show_change_contact.field_names = [
+            f"{18 * '-'}Що будем змінювати?{18 * '-'}"]
         show_change_contact.hrules = 1
         show_change_contact.align = "l"
         show_change_contact.add_rows([["1. Телефон"],
-                                   ["2. Емейл"],
-                                   ["3. Адресу"],
-                                   ["4. День народження"],
-                                   ["5. Повернутись в попереднє меню"]])
+                                      ["2. Емейл"],
+                                      ["3. Адресу"],
+                                      ["4. День народження"],
+                                      ["5. Повернутись в попереднє меню"]])
         return show_change_contact
 
 
