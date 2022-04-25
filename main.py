@@ -78,6 +78,30 @@ class Notes:
     pass
 
 
+class NotesBook(UserDict):
+
+    def __init__(self):
+        self.data = []
+
+    def add_note(self, note: Note):
+        added_note = {'id': '', 'tag': '', 'note': note}
+        self.data.append(added_note)
+
+    def print_menu(self):
+        while True:
+            command = input('''Do you want create notes or check?
+                            Create: enter 1 or create
+                            Check: enter 2 or check
+                            If you need exit, enter exit or 0\n''').lower()
+            if command == '1' or command == 'create':
+                note = Note(input('Enter your notes: '))
+                self.add_note(note)
+            elif command == '2' or command == 'check':
+                print(self.data)
+            elif command == '0' or command == 'exit':
+                break
+
+
 class Menu:
 
     @property
@@ -111,7 +135,8 @@ class Menu:
     @property
     def add_menu(self):
         show_add_contact = ColorTable(theme=Themes.OCEAN)
-        show_add_contact.field_names = [f"{18 * '-'}Що будем добавляти?{18 * '-'}"]
+        show_add_contact.field_names = [
+            f"{18 * '-'}Що будем добавляти?{18 * '-'}"]
         show_add_contact.hrules = 1
         show_add_contact.align = "l"
         show_add_contact.add_rows([["1. Телефон"],
@@ -167,9 +192,8 @@ class Bot:
     def __init__(self):
 
         self.Adderessbook = AddressBook()
-        self.notes = []  # a func add_note should create an instance of Note
-        # and add it to current list
-        self.menu = Menu()  # should be changed
+        self.notes = []
+        self.menu = Menu()
 
         while True:
             print(self.menu.main_menu)
