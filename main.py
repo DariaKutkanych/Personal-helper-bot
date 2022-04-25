@@ -1,7 +1,7 @@
 from collections import UserDict
 from sort_files import sort_folder
-import datetime
 from prettytable.colortable import ColorTable, Themes
+import datetime
 import re
 
 
@@ -213,7 +213,7 @@ class Bot:
 
         sort_folder(file_path)
 
-        print("Done!")
+        print("Well Done!")
 
 
 if __name__ == "__main__":
