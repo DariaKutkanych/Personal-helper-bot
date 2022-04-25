@@ -275,7 +275,7 @@ class Handler:
             else:
                 print('You was wrong or notes didn\'t create')
 
-    def action_edit_note(self, notes_book: NotesBook):
+    def action_search_note(self, notes_book: NotesBook):
         while True:
             print(self.menu.search_note)
 
