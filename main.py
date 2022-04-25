@@ -375,7 +375,9 @@ class Handler:
                                      "замітки", "заметки"]:
                 self.main_action_note(self.notes_book)
             elif command.lower() in ["sort", "сортування", "4", "сортировка"]:
-                pass  # add functional for sort
+                file_path = input('Введіть шлях до файлу')
+                #Dasha this need changes
+                sort_folder(file_path)
 
 
 class Bot:
