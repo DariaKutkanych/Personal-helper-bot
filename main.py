@@ -283,7 +283,7 @@ class Menu:
         show_edit.hrules = 1
         show_edit.align = "l"
         show_edit.add_rows([["1. Тег"],
-                            ["2. нотатку"],
+                            ["2. Нотатку"],
                             ["3. Повернутись в попереднє меню"]])
         return show_edit
 
@@ -372,7 +372,7 @@ class Handler:
             elif command.lower() in ["нотатки", "note", "notes", "2",
                                      "замітки", "заметки"]:
                 self.main_action_note(self.notes_book)
-            elif command.lower() in ["sort", "сортування", "4", "сортиравка"]:
+            elif command.lower() in ["sort", "сортування", "4", "сортировка"]:
                 pass  # add functional for sort
 
 
