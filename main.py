@@ -67,12 +67,56 @@ class Email(Field):
             return
 
 
+class Adress(Field):
+    pass
+
+
 class Record:
-    pass
+    def __init__(self, name, adress = None, phone = None, email = None, birthday = None):
+        if isinstance (name, Name):
+            self.name = name
+        self.adresses = []
+        self.phones = []
+        self.emails = []
+        self.birthday = birthday
 
+    def add_adress(self, adress):
+        adress_list = []
+        for a.value in self.adresses:
+            adress_list.append(str(a.value))
+        if adress in adress_list:
+            print("This adress alredy been added.") 
+        else:
+            new_adress = Adress(adress)
+            self.adresses.append(adress)
+            print(f"for {self.name} add adress {adress}.")
 
-class Note(Field):
-    pass
+    def add_phone(self, phone):
+        phones_list = []
+        for p.value in self.phones:
+            phones_list.append(str(p.value))
+        if phone in phones_list:
+            print("This num alredy been added.")
+        else:
+            new_phone = Phone(phone)
+            self.phones.append(new_phone)
+            print(f"for {self.name} add phone {new_phone}.")
+
+    def add_mail(self, mail):
+        mail_list = []
+        for m.value in self.emails:
+            mail_list.append(str(m.value))
+        if mail in mail_list:
+            print("This mail alredy been added.") 
+        else:
+            new_mail = Email(mail)
+            self.emails.append(new_mail)
+            print(f"for {self.name} add mail {mail}.")
+
+    def add_birthday(self, bd):
+        self.birthday = bd
+        print(f"{self.name} was born {bd}.")
+
 
 
 class NotesBook(UserDict):
@@ -94,8 +138,13 @@ class NotesBook(UserDict):
 
 class AddressBook(UserDict):
 
-    def __init__(self):
-        pass
+#    def __init__(self):  Comment it. With this func AddressBook has no atribut data
+#        pass
+    def add_record(self, set):
+        if isinstance(set, Record):
+            self.data.__setitem__(set.name, (set.adresses, set.phones, set.emails, set.birthday))
+        else:
+            print("try add Record.")
 
 
 class Menu:
