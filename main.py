@@ -1,4 +1,4 @@
-from collections import UserDict
+from collections import UserList
 from sort_files import sort_folder
 from prettytable.colortable import ColorTable, Themes
 import datetime
