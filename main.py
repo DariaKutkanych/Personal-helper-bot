@@ -125,9 +125,9 @@ class Record:
             new_mail = Email(mail)
             self.emails.append(new_mail)
             print(f"for {self.name} add mail {mail}.")
-
+            
     def add_birthday(self, bd):
-        self.birthday = bd
+        self.birthday = Birthday(bd)
         print(f"{self.name} was born {bd}.")
 
 
@@ -190,6 +190,18 @@ class AddressBook(UserDict):
                                              set.emails, set.birthday))
         else:
             print("try add Record.")
+            
+    def get_bd(self, day):
+        now = datetime.datetime.now()                                                           
+        delta = now + datetime.timedelta(days = day)
+        birthday_people = [] 
+        for k, v in self.data.items():
+            for el in v:
+                if isinstance(el, Birthday):
+                    date_val = (el.value).replace(year = now.year)
+                    if now < date_val.replace(hour=23, minute=59, second=59, microsecond=0) < delta:
+                        birthday_people.append(k)
+        print (birthday_people)
 
 
 class Menu:
