@@ -242,6 +242,10 @@ class Handler:
         self.menu = Menu()
         self.notes_book = notes_book
         self.address_book = address_book
+        while True:
+            if self.main_action() is None:
+                break
+            self.handler.main_action()
 
     def main_action_note(self, notes_book: NotesBook):
         self.notes_book = notes_book
@@ -325,10 +329,6 @@ class Bot:
         self.address_book = AddressBook()
         self.handler = Handler(self.notes_book, self.address_book)
 
-        while True:
-            if self.handler.main_action() is None:
-                break
-            self.handler.main_action()
 
     def sort_files(self, file_name):
         # external sort func should be imported
