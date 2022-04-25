@@ -54,7 +54,6 @@ class Birthday(Field):
                 int(new_value[8:10]) > 0:
             try:
                 birthday = datetime.datetime.strptime(new_value, '%Y-%m-%d')
-                print(birthday)
                 Field.value.fset(self, birthday)
             except ValueError:
                 print('\033[31m' + 'Некоректний формат дати! Потрібний формам ррр-мм-дд. Дата не додана')
@@ -284,3 +283,4 @@ class Bot:
 if __name__ == "__main__":
 
     my_bot = Bot()
+
