@@ -21,7 +21,10 @@ class Field:
 
     @value.setter
     def value(self, value):
-        self.__value = value
+        if type(value) == str:
+            self.__value = value
+        elif type(value) == datetime.datetime:
+            self.__value = value
 
 
 class Name(Field):
@@ -47,7 +50,14 @@ class Phone(Field):
 
 
 class Birthday(Field):
-    pass
+
+    @Field.value.setter
+    def value(self, new_value):
+        try:
+            birthday = datetime.datetime.strptime(new_value, '%Y-%m-%d')
+            Field.value.fset(self, birthday)
+        except ValueError:
+            print('\033[31m' + 'Некоректний формат дати! Потрібний формам ррр-мм-дд. Дата не додана')
 
 
 class Email(Field):
@@ -310,6 +320,7 @@ class Handler:
             if command.lower() in ["exit", "close", "good bye", "5", "вихід", "выход"]:
                 print("Good bye!")
                 break
+
             elif command.lower() in ["нотатки", "note", "notes", "2",
                                      "замітки", "заметки"]:
                 self.main_action_note(self.notes_book)
@@ -320,7 +331,7 @@ class Handler:
 class Bot:
 
     def __init__(self):
-        self.menu = Menu()  # should be changed
+        self.menu = Menu()
         self.notes_book = NotesBook()
         self.address_book = AddressBook()
         self.handler = Handler(self.notes_book, self.address_book)
@@ -330,6 +341,7 @@ class Bot:
                 break
             self.handler.main_action()
 
+
     def sort_files(self, file_name):
         # external sort func should be imported
         pass
@@ -337,3 +349,4 @@ class Bot:
 
 if __name__ == "__main__":
     my_bot = Bot()
+    
