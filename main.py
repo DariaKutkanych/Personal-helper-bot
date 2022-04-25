@@ -211,10 +211,10 @@ class Menu:
 
 
 class Handler:
-    def __init__(self):
+    def __init__(self, notes_book : NotesBook, address_book: AddressBook):
         self.menu = Menu()
-        self.notes_book = NotesBook()
-        self.address_book = AddressBook()
+        self.notes_book = notes_book
+        self.address_book = address_book
 
     def main_action_note(self, notes_book: NotesBook):
         self.notes_book = notes_book
@@ -236,7 +236,6 @@ class Handler:
                 print('You was wrong or notes didn\'t create')
 
     def action_edit_note(self, notes_book: NotesBook):
-        self.notes_book = notes_book
         while True:
             print(self.menu.search_note)
 
@@ -279,7 +278,10 @@ class Bot:
 
     def __init__(self):
         self.menu = Menu()  # should be changed
-        self.handler = Handler()
+        self.notes_book = NotesBook()
+        self.address_book = AddressBook()
+        self.handler = Handler(self.notes_book, self.address_book)
+
         while True:
             if self.handler.main_action() is None:
                 break
