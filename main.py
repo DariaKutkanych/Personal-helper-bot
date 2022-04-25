@@ -1,15 +1,21 @@
 from collections import UserDict
+from sort_files import sort_folder
 from prettytable.colortable import ColorTable, Themes
+import datetime
 import re
 
 
 class Field:
 
     def __init__(self, value):
-        self.__value = value
+        self.__value = None
+        self.value = value
+
+    def __str__(self):
+        return self.value
 
     def __repr__(self):
-        return f"{self.__value}"
+        return f'{self.value}'
 
     @property
     def value(self):
@@ -17,7 +23,8 @@ class Field:
 
     @value.setter
     def value(self, value):
-        self.__value = value
+        if type(value) == str:
+            self.__value = value
 
 
 class Name(Field):
@@ -26,40 +33,36 @@ class Name(Field):
 
 class Phone(Field):
 
-    def __init__(self, phone=None):
-        self.phone = phone
-
-    @property
-    def phone(self):
-        return self.phone
-
-    @phone.setter
-    def phone(self, new_value):
+    @Field.value.setter
+    def value(self, new_value):
         if len(list(new_value)) >= 11:
-            self.phone = new_value
+            Field.value.fset(self, new_value)
         else:
             print('\033[31m' + 'Номер не додано! Номер повинен містити не меньше 11 цифр')
             return
 
 
 class Birthday(Field):
-    pass
+
+    @Field.value.setter
+    def value(self, new_value):
+        if len(list(new_value)) == 10 and \
+                int(new_value[0:4]) > 0 and \
+                int(new_value[5:7]) > 0 and \
+                int(new_value[8:10]) > 0:
+            Field.value.fset(self, new_value)
+        else:
+            print(
+                '\033[31m' + 'Некоректний формат дати! Потрібний формам ррр-мм-дд. Дата не додана')
 
 
 class Email(Field):
 
-    def __init__(self, mail=None):
-        self.email = mail
-
-    @property
-    def email(self):
-        return self.email
-
-    @email.setter
-    def email(self, add_value):
+    @Field.value.setter
+    def value(self, add_value):
         regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
         if (re.search(regex, add_value)):
-            self.email = add_value
+            Field.value.fset(self, add_value)
         else:
             print("\033[31m" + "Емейл не доданий не коректний формат! Формат excample@mail.com")
             return
@@ -88,8 +91,6 @@ class NotesBook(UserDict):
 
     def search_note(self):
         pass
-
-
 
 
 class AddressBook(UserDict):
@@ -126,6 +127,7 @@ class Menu:
                             ["4. Видалити дані з контакту"],
                             ["5. Повернутись в попереднє меню"],
                             ])
+        
         return show_main_contact
 
     @property
@@ -175,6 +177,33 @@ class Menu:
         show_notes_menu.hrules = 1
         show_notes_menu.align = "l"
         show_notes_menu.add_rows([["1. Подивитись всі нотатки"],
+                                  ["2. Додати нотатку"],
+                                  ["3. Змінити нотатку"],
+                                  ["4. Видалити нотатку"],
+                                  ["5. Повернутись в попереднє меню"]])
+        return show_notes_menu
+
+    @property
+    def delete_menu(self):
+        show_delete = ColorTable(theme=Themes.OCEAN)
+        show_delete.field_names = [f"{18 * '-'}Що будем видаляти?{18 * '-'}"]
+        show_delete.hrules = 1
+        show_delete.align = "l"
+        show_delete.add_rows([["1. Телефон"],
+                              ["2. Емейл"],
+                              ["3. Адресу"],
+                              ["4. День народження"],
+                              ["5. Видалити контакт з книги"],
+                              ["6. Повернутись в попереднє меню"]])
+        return show_delete
+
+    @property
+    def notes_menu(self):
+        show_notes_menu = ColorTable(theme=Themes.OCEAN)
+        show_notes_menu.field_names = [f"{18 * '-'}Нотатки{18 * '-'}"]
+        show_notes_menu.hrules = 1
+        show_notes_menu.align = "l"
+        show_notes_menu.add_rows([["1. Подивитись всі нотатки"],
                                       ["2. Додати нотатку"],
                                       ["3. Знайти нотатку"],
                                       ["4. Змінити нотатку"],
@@ -184,6 +213,7 @@ class Menu:
 
 
 class Handler:
+  
     def __init__(self):
         self.menu = Menu()
         self.notes_book = NotesBook()
@@ -221,6 +251,7 @@ class Handler:
 
             command = input("\033[34m" + "Обери потрібну команду(1-5), "
                                          "або я спробую вгадати: ")
+
             if command.lower() in ["exit", "close", "good bye", "5", "вихід", "выход"]:
                 print("Good bye!")
                 return 'break'
@@ -241,11 +272,8 @@ class Bot:
                 break
             self.handler.main_action()
 
-    def sort_files(self, file_name):
-        # external sort func should be imported
-        pass
-
-
+    def sort_files(self, file_path):
+        sort_folder(file_path)
 
 
 if __name__ == "__main__":
