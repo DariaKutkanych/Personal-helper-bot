@@ -314,11 +314,15 @@ class Handler:
             if command.lower() in ["exit", "close", "good bye", "5", "вихід", "выход"]:
                 print("Good bye!")
                 break
+            elif command.lower() in ["phone", "телефон", "номер", "1","number"]:
+                self.action_phone(self.address_book)
             elif command.lower() in ["нотатки", "note", "notes", "2",
                                      "замітки", "заметки"]:
                 self.main_action_note(self.notes_book)
-            elif command.lower() in ["phone", "телефон", "номер", "1","number"]:
-                self.action_phone(self.address_book)
+            elif command.lower() in ["sort", "сортування", "4","сортиравка"]:
+                pass # add functional for sort
+
+
 
 
 class Bot:
