@@ -89,10 +89,17 @@ class NotesBook(UserList):
         #need to add beautiful output like in future AddressBook
         return f"{self.data}"
 
-    def add_note(self, note: Note):
+    def add_note(self, note: Note, tag = ""):
         self.note = note
-        self.data.append({"id": len(self.data)+1, "tag": "tag",
+        self.tag = tag
+        self.id_note = len(self.data)+1
+        self.data.append({"id": self.id_note, "tag": self.tag,
                                "note": self.note})
+
+    def delete_note(self, note: Note):
+        for i in self.data:
+            if i.get('note') == note:
+                return (f"Вы удалили заметку {self.data.pop(self.data.index(i))}")
 
     def search_parametr_note(self, note_parametr, user_parametr):
         for i in self.data:
@@ -105,6 +112,12 @@ class NotesBook(UserList):
             if re.findall(part_note, str(i.get('note'))):
                 self.find_all_notes.append(i.get('note'))
         return self.find_all_notes
+
+    def edit_note(self, note: Note):
+        pass
+
+    def sort_note(self):
+        pass
 
 
 class AddressBook(UserDict):
@@ -194,19 +207,33 @@ class Menu:
                                       ["3. Знайти нотатку"],
                                       ["4. Змінити нотатку"],
                                       ["5. Видалити нотатку"],
-                                      ["6. Повернутись в попереднє меню"]])
+                                      ["6. Сортувати нотатки за тегами"],
+                                      ["7. Повернутись в попереднє меню"]])
         return show_notes_menu
 
     @property
     def search_note(self):
         show_edit = ColorTable(theme=Themes.OCEAN)
-        show_edit.field_names = [f"{18 * '-'}Як будемо шукати?{18 * '-'}"]
+        show_edit.field_names = [f"{18 * '-'}За яким критерієм?"
+                                 f"{18 * '-'}"]
         show_edit.hrules = 1
         show_edit.align = "l"
         show_edit.add_rows([["1. По id замітки"],
                               ["2. По тегу замітки"],
                               ["3. По головному слову"],
                               ["4. Повернутись в попереднє меню"]])
+        return show_edit
+
+    @property
+    def edit_note(self):
+        show_edit = ColorTable(theme=Themes.OCEAN)
+        show_edit.field_names = [f"{18 * '-'}Що змінити?"
+                                 f"{18 * '-'}"]
+        show_edit.hrules = 1
+        show_edit.align = "l"
+        show_edit.add_rows([["1. Тег"],
+                              ["2. нотатку"],
+                              ["3. Повернутись в попереднє меню"]])
         return show_edit
 
 
@@ -226,9 +253,22 @@ class Handler:
                 print(notes_book)
             elif action.lower() in ["2", "create", "створити", "создать"]:
                 note = Note(input('Введіть нонатку: '))
-                self.notes_book.add_note(note)
+                flag_tag = input("Чи хочете ви додати тег до замітки? Введіть "
+                              "так, якщо бажаєте, інакше ні: ")
+                if flag_tag.lower() in ["так", "yes", "да", "хочу"]:
+                    tag_note = Note(input('Введіть тег: '))
+                    self.notes_book.add_note(note, tag_note)
+                else:
+                    self.notes_book.add_note(note)
             elif action.lower() in ["3", "знайти", "search", "пошук", "найти"]:
-                self.action_edit_note(notes_book)
+                print(self.action_search_note(notes_book))
+            elif action.lower() in ["4", "edit", "редагувати", "змінити",
+                                    "изменить"]:
+                pass
+            elif action.lower() in ["5", "delete", "remove", "видалити",
+                                    "удалить", "стерти"]:
+                print(self.notes_book.delete_note(self.action_search_note(
+                    notes_book)))
             elif action.lower() in ["exit", "close", "good bye", "6", "вихід",
                                     "выход","повернутись"]:
                 break
@@ -243,17 +283,20 @@ class Handler:
                                          "або я спробую вгадати: ")
             if command.lower() in ["id", "ид", "ід", "1"]:
                 id_parametr = input('Введіть id нотатки: ')
-                print(notes_book.search_parametr_note("id", id_parametr))
+                return notes_book.search_parametr_note("id", id_parametr)
             elif command.lower() in ["tag", "тег", "notes", "2"]:
                 tag_parametr = input('Введіть tag нотатки: ')
-                print(notes_book.search_parametr_note("tag", tag_parametr))
+                return notes_book.search_parametr_note("tag", tag_parametr)
             elif command.lower() in ["головне", "main", "слово", "3"]:
                 word_parametr = input('Введіть головне слово нотатки: ')
-                print(notes_book.search_word_note(word_parametr))
+                return notes_book.search_word_note(word_parametr)
             elif command.lower() in ["exit", "close", "good bye", "4",
                                      "вихід", "выход", "повернутись"]:
                 print("Good bye!")
                 break
+
+    def action_edit_note(self, notes_book: NotesBook):
+        pass
 
     def action_phone(self, address_book: AddressBook):
         pass
