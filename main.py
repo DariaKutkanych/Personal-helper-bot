@@ -48,18 +48,11 @@ class Birthday(Field):
 
     @Field.value.setter
     def value(self, new_value):
-        if len(list(new_value)) == 10 and \
-                int(new_value[0:4]) > 0 and \
-                int(new_value[5:7]) > 0 and \
-                int(new_value[8:10]) > 0:
-            try:
-                birthday = datetime.datetime.strptime(new_value, '%Y-%m-%d')
-                Field.value.fset(self, birthday)
-            except ValueError:
-                print('\033[31m' + 'Некоректний формат дати! Потрібний формам ррр-мм-дд. Дата не додана')
-        else:
-            print(
-                '\033[31m' + 'Некоректний формат дати! Потрібний формам ррр-мм-дд. Дата не додана')
+        try:
+            birthday = datetime.datetime.strptime(new_value, '%Y-%m-%d')
+            Field.value.fset(self, birthday)
+        except ValueError:
+            print('\033[31m' + 'Некоректний формат дати! Потрібний формам ррр-мм-дд. Дата не додана')
 
 
 class Email(Field):
@@ -283,4 +276,5 @@ class Bot:
 if __name__ == "__main__":
 
     my_bot = Bot()
+
 
