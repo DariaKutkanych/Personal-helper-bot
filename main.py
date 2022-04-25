@@ -80,23 +80,16 @@ class NotesBook(UserDict):
 
     def add_note(self, note: Note):
         self.note = note.value
-        self.added_note = {'id': '', 'tag': '', 'note': self.note}
+        self.added_note = {'id': len(self.data)+1, 'tag': '', 'note': \
+            self.note}
         self.data.append(self.added_note)
+        flag_tag = input("Do you want to add tag for this note? Enter y, "
+                         "if yes otherwise enter n")
 
-    def menu_notes(self, action): # this def will change, when we will have finish
+    def search_note(self):
+        pass
 
-        while True:
-            if (action == '1' or action == 'check') and self.data:
-                print(self.data)
-                break
-            elif action == '2' or action == 'create':
-                note = Note(input('Enter your notes: '))
-                self.add_note(note)
-                break
-            elif action == '5' or action == 'exit':
-                break
-            else:
-                print('You was wrong or notes didn\'t create')
+
 
 
 class AddressBook(UserDict):
@@ -183,9 +176,10 @@ class Menu:
         show_notes_menu.align = "l"
         show_notes_menu.add_rows([["1. Подивитись всі нотатки"],
                                       ["2. Додати нотатку"],
-                                      ["3. Змінити нотатку"],
-                                      ["4. Видалити нотатку"],
-                                      ["5. Повернутись в попереднє меню"]])
+                                      ["3. Знайти нотатку"],
+                                      ["4. Змінити нотатку"],
+                                      ["5. Видалити нотатку"],
+                                      ["6. Повернутись в попереднє меню"]])
         return show_notes_menu
 
 
@@ -201,12 +195,19 @@ class Handler:
             print(self.menu.notes_menu)
             action = input("\033[34m" + "Обери потрібну команду(1-5), "
                                          "або я спробую вгадати: ")
-            if (action == '1' or action == 'check') and  self.notes_book.data:
-                print( self.notes_book.data)
-            elif action == '2' or action == 'create':
-                note = Note(input('Enter your notes: '))
+            if action.lower() in ["1", "check", "подивитись", "нотатки",
+                                     "замітки", "заметки"]:
+                print(self.notes_book.data)
+            elif action.lower() in ["2", "create", "створити", "создать",
+                                     "замітки", "заметки"]:
+                note = Note(input('Введіть нонатку: '))
                 self.notes_book.add_note(note)
-            elif action == '5' or action == 'exit':
+            elif action.lower() in ["3", "знайти", "search", "нотатки",
+                                     "замітки", "заметки"]:
+                pass
+                #self.notes_book.add_note(note)
+            elif action.lower() in ["exit", "close", "good bye", "5", "вихід",
+                                    "выход"]:
                 break
             else:
                 print('You was wrong or notes didn\'t create')
@@ -226,7 +227,7 @@ class Handler:
             elif command.lower() in ["нотатки", "note", "notes", "2",
                                      "замітки", "заметки"]:
                 self.action_note(self.notes_book)
-            elif command.lower() in ["phone", "номер телефона", "номер", "1"]:
+            elif command.lower() in ["phone", "телефон", "номер", "1","number"]:
                 self.action_phone(self.address_book)
 
 
