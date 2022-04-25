@@ -25,6 +25,8 @@ class Field:
     def value(self, value):
         if type(value) == str:
             self.__value = value
+        elif type(value) == datetime.datetime:
+            self.__value = value
 
 
 class Name(Field):
@@ -50,7 +52,12 @@ class Birthday(Field):
                 int(new_value[0:4]) > 0 and \
                 int(new_value[5:7]) > 0 and \
                 int(new_value[8:10]) > 0:
-            Field.value.fset(self, new_value)
+            try:
+                birthday = datetime.datetime.strptime(new_value, '%Y-%m-%d')
+                print(birthday)
+                Field.value.fset(self, birthday)
+            except ValueError:
+                print('\033[31m' + 'Некоректний формат дати! Потрібний формам ррр-мм-дд. Дата не додана')
         else:
             print(
                 '\033[31m' + 'Некоректний формат дати! Потрібний формам ррр-мм-дд. Дата не додана')
