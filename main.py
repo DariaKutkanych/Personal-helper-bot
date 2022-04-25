@@ -1,4 +1,5 @@
 from collections import UserDict
+from sort_files import sort_folder
 import datetime
 from prettytable.colortable import ColorTable, Themes
 import re
@@ -43,7 +44,8 @@ class Phone(Field):
         if len(list(new_value)) >= 11:
             Field.value.fset(self, new_value)
         else:
-            print('\033[31m' + 'Номер не додано! Номер повинен містити не меньше 11 цифр')
+            print(
+                '\033[31m' + 'Номер не додано! Номер повинен містити не меньше 11 цифр')
 
 
 class Birthday(Field):
@@ -56,7 +58,8 @@ class Birthday(Field):
                 int(new_value[8:10]) > 0:
             Field.value.fset(self, new_value)
         else:
-            print('\033[31m' + 'Некоректний формат дати! Потрібний формам ррр-мм-дд. Дата не додана')
+            print(
+                '\033[31m' + 'Некоректний формат дати! Потрібний формам ррр-мм-дд. Дата не додана')
 
 
 class Email(Field):
@@ -67,7 +70,8 @@ class Email(Field):
         if (re.search(regex, add_value)):
             Field.value.fset(self, add_value)
         else:
-            print("\033[31m" + "Емейл не доданий не коректний формат! Формат excample@mail.com")
+            print(
+                "\033[31m" + "Емейл не доданий не коректний формат! Формат excample@mail.com")
 
 
 class Record:
@@ -125,11 +129,11 @@ class Menu:
         show_main_contact.hrules = 1
         show_main_contact.align = "l"
         show_main_contact.add_rows([["1. Створити контакт"],
-                            ["2. Добавити дані до існуючого контакту"],
-                            ["3. Редагувати дані контакту"],
-                            ["4. Видалити дані з контакту"],
-                            ["5. Повернутись в попереднє меню"],
-                            ])
+                                    ["2. Добавити дані до існуючого контакту"],
+                                    ["3. Редагувати дані контакту"],
+                                    ["4. Видалити дані з контакту"],
+                                    ["5. Повернутись в попереднє меню"],
+                                    ])
         return show_main_contact
 
     @property
@@ -153,10 +157,10 @@ class Menu:
         show_edit.hrules = 1
         show_edit.align = "l"
         show_edit.add_rows([["1. Телефон"],
-                              ["2. Емейл"],
-                              ["3. Адресу"],
-                              ["4. День народження"],
-                              ["5. Повернутись в попереднє меню"]])
+                            ["2. Емейл"],
+                            ["3. Адресу"],
+                            ["4. День народження"],
+                            ["5. Повернутись в попереднє меню"]])
         return show_edit
 
     @property
@@ -180,10 +184,10 @@ class Menu:
         show_notes_menu.hrules = 1
         show_notes_menu.align = "l"
         show_notes_menu.add_rows([["1. Подивитись всі нотатки"],
-                                      ["2. Додати нотатку"],
-                                      ["3. Змінити нотатку"],
-                                      ["4. Видалити нотатку"],
-                                      ["5. Повернутись в попереднє меню"]])
+                                  ["2. Додати нотатку"],
+                                  ["3. Змінити нотатку"],
+                                  ["4. Видалити нотатку"],
+                                  ["5. Повернутись в попереднє меню"]])
         return show_notes_menu
 
 
@@ -198,18 +202,20 @@ class Bot:
         while True:
             print(self.menu.main_menu)
 
-            command = input("\033[34m" + "Обери потрібну команду(1-5), або я спробую вгадати: ")
+            command = input(
+                "\033[34m" + "Обери потрібну команду(1-5), або я спробую вгадати: ")
 
             if command.lower() in ["exit", "close", "good bye", "5", "вихід", "выход"]:
                 print("Good bye!")
                 break
 
-    def sort_files(self, file_name):
-        # external sort func should be imported
-        pass
+    def sort_files(self, file_path):
+
+        sort_folder(file_path)
+
+        print("Done!")
 
 
 if __name__ == "__main__":
 
     my_bot = Bot()
-
