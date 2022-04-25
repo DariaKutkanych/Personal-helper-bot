@@ -1,4 +1,4 @@
-from collections import UserDict
+from collections import UserDict, UserList
 from prettytable.colortable import ColorTable, Themes
 import re
 
@@ -6,10 +6,14 @@ import re
 class Field:
 
     def __init__(self, value):
-        self.__value = value
+        self.__value = None
+        self.value = value
 
     def __repr__(self):
-        return f"{self.__value}"
+        return f"{self.value}"
+
+    def __str__(self):
+        return f"{self.value}"
 
     @property
     def value(self):
@@ -73,23 +77,34 @@ class Note(Field):
     pass
 
 
-class NotesBook(UserDict):
+class NotesBook(UserList):
 
     def __init__(self):
         self.data = []
+        self.note = ""
+        self.id_note = None
+        self.tag = ""
+
+    def __str__(self):
+        #need to add beautiful output like in future AddressBook
+        return f"{self.data}"
 
     def add_note(self, note: Note):
-        self.note = note.value
-        self.added_note = {'id': len(self.data)+1, 'tag': '', 'note': \
-            self.note}
-        self.data.append(self.added_note)
-        flag_tag = input("Do you want to add tag for this note? Enter y, "
-                         "if yes otherwise enter n")
+        self.note = note
+        self.data.append({"id": len(self.data)+1, "tag": "tag",
+                               "note": self.note})
 
-    def search_note(self):
-        pass
+    def search_parametr_note(self, note_parametr, user_parametr):
+        for i in self.data:
+            if str(i.get(note_parametr)) == user_parametr:
+                return i.get("note")
 
-
+    def search_word_note(self, part_note): #need to be impoves
+        self.find_all_notes = []
+        for i in self.data:
+            if re.findall(part_note, str(i.get('note'))):
+                self.find_all_notes.append(i.get('note'))
+        return self.find_all_notes
 
 
 class AddressBook(UserDict):
@@ -182,6 +197,18 @@ class Menu:
                                       ["6. Повернутись в попереднє меню"]])
         return show_notes_menu
 
+    @property
+    def search_note(self):
+        show_edit = ColorTable(theme=Themes.OCEAN)
+        show_edit.field_names = [f"{18 * '-'}Як будемо шукати?{18 * '-'}"]
+        show_edit.hrules = 1
+        show_edit.align = "l"
+        show_edit.add_rows([["1. По id замітки"],
+                              ["2. По тегу замітки"],
+                              ["3. По головному слову"],
+                              ["4. Повернутись в попереднє меню"]])
+        return show_edit
+
 
 class Handler:
     def __init__(self):
@@ -189,28 +216,45 @@ class Handler:
         self.notes_book = NotesBook()
         self.address_book = AddressBook()
 
-    def action_note(self, notes_book: NotesBook):
+    def main_action_note(self, notes_book: NotesBook):
         self.notes_book = notes_book
         while True:
             print(self.menu.notes_menu)
             action = input("\033[34m" + "Обери потрібну команду(1-5), "
                                          "або я спробую вгадати: ")
-            if action.lower() in ["1", "check", "подивитись", "нотатки",
-                                     "замітки", "заметки"]:
-                print(self.notes_book.data)
-            elif action.lower() in ["2", "create", "створити", "создать",
-                                     "замітки", "заметки"]:
+            if action.lower() in ["1", "check", "подивитись"]:
+                print(notes_book)
+            elif action.lower() in ["2", "create", "створити", "создать"]:
                 note = Note(input('Введіть нонатку: '))
                 self.notes_book.add_note(note)
-            elif action.lower() in ["3", "знайти", "search", "нотатки",
-                                     "замітки", "заметки"]:
-                pass
-                #self.notes_book.add_note(note)
-            elif action.lower() in ["exit", "close", "good bye", "5", "вихід",
-                                    "выход"]:
+            elif action.lower() in ["3", "знайти", "search", "пошук", "найти"]:
+                self.action_edit_note(notes_book)
+            elif action.lower() in ["exit", "close", "good bye", "6", "вихід",
+                                    "выход","повернутись"]:
                 break
             else:
                 print('You was wrong or notes didn\'t create')
+
+    def action_edit_note(self, notes_book: NotesBook):
+        self.notes_book = notes_book
+        while True:
+            print(self.menu.search_note)
+
+            command = input("\033[34m" + "Обери потрібну команду(1-4), "
+                                         "або я спробую вгадати: ")
+            if command.lower() in ["id", "ид", "ід", "1"]:
+                id_parametr = input('Введіть id нотатки: ')
+                print(notes_book.search_parametr_note("id", id_parametr))
+            elif command.lower() in ["tag", "тег", "notes", "2"]:
+                tag_parametr = input('Введіть tag нотатки: ')
+                print(notes_book.search_parametr_note("tag", tag_parametr))
+            elif command.lower() in ["головне", "main", "слово", "3"]:
+                word_parametr = input('Введіть головне слово нотатки: ')
+                print(notes_book.search_word_note(word_parametr))
+            elif command.lower() in ["exit", "close", "good bye", "4",
+                                     "вихід", "выход", "повернутись"]:
+                print("Good bye!")
+                break
 
     def action_phone(self, address_book: AddressBook):
         pass
@@ -223,10 +267,10 @@ class Handler:
                                          "або я спробую вгадати: ")
             if command.lower() in ["exit", "close", "good bye", "5", "вихід", "выход"]:
                 print("Good bye!")
-                return 'break'
+                break
             elif command.lower() in ["нотатки", "note", "notes", "2",
                                      "замітки", "заметки"]:
-                self.action_note(self.notes_book)
+                self.main_action_note(self.notes_book)
             elif command.lower() in ["phone", "телефон", "номер", "1","number"]:
                 self.action_phone(self.address_book)
 
@@ -237,7 +281,7 @@ class Bot:
         self.menu = Menu()  # should be changed
         self.handler = Handler()
         while True:
-            if self.handler.main_action():
+            if self.handler.main_action() is None:
                 break
             self.handler.main_action()
 
@@ -246,8 +290,5 @@ class Bot:
         pass
 
 
-
-
 if __name__ == "__main__":
-
     my_bot = Bot()
