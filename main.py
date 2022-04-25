@@ -254,7 +254,8 @@ class Handler:
 
             if command.lower() in ["exit", "close", "good bye", "5", "вихід", "выход"]:
                 print("Good bye!")
-                return 'break'
+                break
+                
             elif command.lower() in ["нотатки", "note", "notes", "2",
                                      "замітки", "заметки"]:
                 self.action_note(self.notes_book)
@@ -267,10 +268,7 @@ class Bot:
     def __init__(self):
         self.menu = Menu()  # should be changed
         self.handler = Handler()
-        while True:
-            if self.handler.main_action():
-                break
-            self.handler.main_action()
+        self.handler.main_action()
 
     def sort_files(self, file_path):
         sort_folder(file_path)
