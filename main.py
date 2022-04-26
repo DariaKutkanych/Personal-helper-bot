@@ -155,23 +155,25 @@ class NotesBook(UserList):
         self.data.append({"id": self.id_note, "tag": self.tag,
                           "note": self.note})
 
-    def delete_note(self, note: Note):
-        for i in self.data:
-            if i.get('note') == note:
-                return (
-                    f"Вы удалили заметку {self.data.pop(self.data.index(i))}")
+    def delete_note(self, *args: Note):
+        print(args)
+        for i in args:
+            print(type(i.get('id')))
+            print(f"Вы удалили заметку {self.data.pop(i.get('id') - 1)}")
 
     def search_parametr_note(self, note_parametr, user_parametr):
+        find_note = []
         for i in self.data:
             if str(i.get(note_parametr)) == user_parametr:
-                return i.get("note")
+                find_note.append(i)
+        return find_note
 
     def search_word_note(self, part_note):  # need to be impoves
-        self.find_all_notes = []
+        find_all_notes = []
         for i in self.data:
             if re.findall(part_note, str(i.get('note'))):
-                self.find_all_notes.append(i.get('note'))
-        return self.find_all_notes
+                find_all_notes.append(i)
+        return find_all_notes
 
     def edit_note(self, note: Note):
         pass
@@ -267,7 +269,7 @@ class Menu:
     @property
     def search_note(self):
         show_edit = ColorTable(theme=Themes.OCEAN)
-        show_edit.field_names = [f"{18 * '-'}За яким критерієм?"
+        show_edit.field_names = [f"{18 * '-'}За яким критерієм будемо шукати?"
                                  f"{18 * '-'}"]
         show_edit.hrules = 1
         show_edit.align = "l"
@@ -324,8 +326,14 @@ class Handler:
                 pass
             elif action.lower() in ["5", "delete", "remove", "видалити",
                                     "удалить", "стерти"]:
-                print(self.notes_book.delete_note(self.action_search_note(
-                    notes_book)))
+                print(f"Ви намагаєтесь видалити замітки:\n "
+                      f"{self.action_search_note(notes_book)}")
+                flag_notes_delete = input("Якщо хочете видалити, напишіть"
+                                          " + або так, для безпеки видаляйте "
+                                          "за id: ")
+                if flag_notes_delete.lower() in ["+", "так", "хочу", "го"]:
+                    self.notes_book.delete_note(self.action_search_note(
+                        notes_book))
             elif action.lower() in ["exit", "close", "good bye", "6", "вихід",
                                     "выход", "повернутись"]:
                 break
@@ -376,7 +384,7 @@ class Handler:
                 self.main_action_note(self.notes_book)
             elif command.lower() in ["sort", "сортування", "4", "сортировка"]:
                 file_path = input('Введіть шлях до файлу')
-                #Dasha this need changes
+                # Dasha this need changes
                 sort_folder(file_path)
 
 
