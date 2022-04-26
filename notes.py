@@ -8,9 +8,9 @@ class NotesBook(UserList):
     def __init__(self):
         super().__init__()
         self.data = []
-        self.note = ""
         self.id_note = None
         self.tag = ""
+        self.note = ""
 
     def __str__(self):
         # need to add beautiful output like in future AddressBook
