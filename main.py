@@ -3,93 +3,28 @@ from sort_files import sort_folder
 from prettytable.colortable import ColorTable, Themes
 import datetime
 import re
-
-
-class Field:
-
-    def __init__(self, value):
-        self.__value = None
-        self.value = value
-
-    def __str__(self):
-        return self.value
-
-    def __repr__(self):
-        return f'{self.value}'
-
-    @property
-    def value(self):
-        return self.__value
-
-    @value.setter
-    def value(self, value):
-        if type(value) == str:
-            self.__value = value
-        elif type(value) == datetime.datetime:
-            self.__value = value
-
-
-class Name(Field):
-    pass
-
-
-class Phone(Field):
-
-    @Field.value.setter
-    def value(self, new_value):
-        if len(list(new_value)) >= 11:
-            Field.value.fset(self, new_value)
-        else:
-            print('\033[31m' + 'Номер не додано! Номер повинен містити не меньше 11 цифр')
-            return
-
-
-class Birthday(Field):
-
-    @Field.value.setter
-    def value(self, new_value):
-        try:
-            birthday = datetime.datetime.strptime(new_value, '%Y-%m-%d')
-            Field.value.fset(self, birthday)
-        except ValueError:
-            print('\033[31m' + 'Некоректний формат дати! Потрібний формам ррр-мм-дд. Дата не додана')
-
-
-class Email(Field):
-
-    @Field.value.setter
-    def value(self, add_value):
-        regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w{2,3}$'
-        if (re.search(regex, add_value)):
-            Field.value.fset(self, add_value)
-        else:
-            print("\033[31m" + "Емейл не доданий не коректний формат! Формат excample@mail.com")
-            return
-
-
-class Adress(Field):
-    pass
+from field import Name, Phone, Email, Address
 
 
 class Record:
-    def __init__(self, name, adress = None, phone = None, email = None, birthday = None):
-        if isinstance (name, Name):
+    def __init__(self, name, address=None, phone=None, email=None, birthday=None):
+        if isinstance(name, Name):
             self.name = name
-        self.adresses = []
+        self.addresses = []
         self.phones = []
         self.emails = []
         self.birthday = birthday
 
-    def add_adress(self, adress):
-        adress_list = []
-        for a.value in self.adresses:
-            adress_list.append(str(a.value))
-        if adress in adress_list:
-            print("This adress alredy been added.") 
+    def add_address(self, address):
+        address_list = []
+        for a.value in self.addresses:
+            address_list.append(str(a.value))
+        if address in address_list:
+            print("This address alredy been added.")
         else:
-            new_adress = Adress(adress)
-            self.adresses.append(adress)
-            print(f"for {self.name} add adress {adress}.")
+            new_address = Address(address)
+            self.addresses.append(address)
+            print(f"for {self.name} add address {address}.")
 
     def add_phone(self, phone):
         phones_list = []
@@ -107,16 +42,15 @@ class Record:
         for m.value in self.emails:
             mail_list.append(str(m.value))
         if mail in mail_list:
-            print("This mail alredy been added.") 
+            print("This mail alredy been added.")
         else:
             new_mail = Email(mail)
             self.emails.append(new_mail)
             print(f"for {self.name} add mail {mail}.")
-            
+
     def add_birthday(self, bd):
         self.birthday = Birthday(bd)
         print(f"{self.name} was born {bd}.")
-
 
 
 class NotesBook(UserDict):
@@ -126,8 +60,8 @@ class NotesBook(UserDict):
 
     def add_note(self, note: Note):
         self.note = note.value
-        self.added_note = {'id': len(self.data)+1, 'tag': '', 'note': \
-            self.note}
+        self.added_note = {'id': len(self.data)+1, 'tag': '', 'note':
+                           self.note}
         self.data.append(self.added_note)
         flag_tag = input("Do you want to add tag for this note? Enter y, "
                          "if yes otherwise enter n")
@@ -138,25 +72,26 @@ class NotesBook(UserDict):
 
 class AddressBook(UserDict):
 
-#    def __init__(self):  Comment it. With this func AddressBook has no atribut data
-#        pass
+    #    def __init__(self):  Comment it. With this func AddressBook has no atribut data
+    #        pass
     def add_record(self, set):
         if isinstance(set, Record):
-            self.data.__setitem__(set.name, (set.adresses, set.phones, set.emails, set.birthday))
+            self.data.__setitem__(
+                set.name, (set.addresses, set.phones, set.emails, set.birthday))
         else:
             print("try add Record.")
-            
+
     def get_bd(self, day):
-        now = datetime.datetime.now()                                                           
-        delta = now + datetime.timedelta(days = day)
-        birthday_people = [] 
+        now = datetime.datetime.now()
+        delta = now + datetime.timedelta(days=day)
+        birthday_people = []
         for k, v in self.data.items():
             for el in v:
                 if isinstance(el, Birthday):
-                    date_val = (el.value).replace(year = now.year)
+                    date_val = (el.value).replace(year=now.year)
                     if now < date_val.replace(hour=23, minute=59, second=59, microsecond=0) < delta:
                         birthday_people.append(k)
-        print (birthday_people)
+        print(birthday_people)
 
 
 class Menu:
@@ -182,18 +117,19 @@ class Menu:
         show_main_contact.hrules = 1
         show_main_contact.align = "l"
         show_main_contact.add_rows([["1. Створити контакт"],
-                            ["2. Добавити дані до існуючого контакту"],
-                            ["3. Редагувати дані контакту"],
-                            ["4. Видалити дані з контакту"],
-                            ["5. Повернутись в попереднє меню"],
-                            ])
-        
+                                    ["2. Добавити дані до існуючого контакту"],
+                                    ["3. Редагувати дані контакту"],
+                                    ["4. Видалити дані з контакту"],
+                                    ["5. Повернутись в попереднє меню"],
+                                    ])
+
         return show_main_contact
 
     @property
     def add_menu(self):
         show_add_contact = ColorTable(theme=Themes.OCEAN)
-        show_add_contact.field_names = [f"{18 * '-'}Що будем добавляти?{18 * '-'}"]
+        show_add_contact.field_names = [
+            f"{18 * '-'}Що будем добавляти?{18 * '-'}"]
         show_add_contact.hrules = 1
         show_add_contact.align = "l"
         show_add_contact.add_rows([["1. Телефон"],
@@ -210,10 +146,10 @@ class Menu:
         show_edit.hrules = 1
         show_edit.align = "l"
         show_edit.add_rows([["1. Телефон"],
-                              ["2. Емейл"],
-                              ["3. Адресу"],
-                              ["4. День народження"],
-                              ["5. Повернутись в попереднє меню"]])
+                            ["2. Емейл"],
+                            ["3. Адресу"],
+                            ["4. День народження"],
+                            ["5. Повернутись в попереднє меню"]])
         return show_edit
 
     @property
@@ -264,16 +200,16 @@ class Menu:
         show_notes_menu.hrules = 1
         show_notes_menu.align = "l"
         show_notes_menu.add_rows([["1. Подивитись всі нотатки"],
-                                      ["2. Додати нотатку"],
-                                      ["3. Знайти нотатку"],
-                                      ["4. Змінити нотатку"],
-                                      ["5. Видалити нотатку"],
-                                      ["6. Повернутись в попереднє меню"]])
+                                  ["2. Додати нотатку"],
+                                  ["3. Знайти нотатку"],
+                                  ["4. Змінити нотатку"],
+                                  ["5. Видалити нотатку"],
+                                  ["6. Повернутись в попереднє меню"]])
         return show_notes_menu
 
 
 class Handler:
-  
+
     def __init__(self):
         self.menu = Menu()
         self.notes_book = NotesBook()
@@ -284,18 +220,18 @@ class Handler:
         while True:
             print(self.menu.notes_menu)
             action = input("\033[34m" + "Обери потрібну команду(1-5), "
-                                         "або я спробую вгадати: ")
+                           "або я спробую вгадати: ")
             if action.lower() in ["1", "check", "подивитись", "нотатки",
-                                     "замітки", "заметки"]:
+                                  "замітки", "заметки"]:
                 print(self.notes_book.data)
             elif action.lower() in ["2", "create", "створити", "создать",
-                                     "замітки", "заметки"]:
+                                    "замітки", "заметки"]:
                 note = Note(input('Введіть нонатку: '))
                 self.notes_book.add_note(note)
             elif action.lower() in ["3", "знайти", "search", "нотатки",
-                                     "замітки", "заметки"]:
+                                    "замітки", "заметки"]:
                 pass
-                #self.notes_book.add_note(note)
+                # self.notes_book.add_note(note)
             elif action.lower() in ["exit", "close", "good bye", "5", "вихід",
                                     "выход"]:
                 break
@@ -315,11 +251,11 @@ class Handler:
             if command.lower() in ["exit", "close", "good bye", "5", "вихід", "выход"]:
                 print("Good bye!")
                 break
-                
+
             elif command.lower() in ["нотатки", "note", "notes", "2",
                                      "замітки", "заметки"]:
                 self.action_note(self.notes_book)
-            elif command.lower() in ["phone", "телефон", "номер", "1","number"]:
+            elif command.lower() in ["phone", "телефон", "номер", "1", "number"]:
                 self.action_phone(self.address_book)
 
 
@@ -337,5 +273,3 @@ class Bot:
 if __name__ == "__main__":
 
     my_bot = Bot()
-
-
