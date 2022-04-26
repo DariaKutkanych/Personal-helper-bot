@@ -215,8 +215,11 @@ class AddressBook(UserDict):
                     if now < date_val.replace(hour=23, minute=59, second=59, microsecond=0) < delta:
                         birthday_people.append(k)
         print (birthday_people)
+<<<<<<< HEAD
     def search_by_name(self, name):
         pass
+=======
+>>>>>>> 54024ed99a571d7a280f7edfd5e28e95a079d7c7
 
 
 class Menu:
