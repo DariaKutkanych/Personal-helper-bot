@@ -13,7 +13,7 @@ class Record:
 
     def add_address(self, address):
         address_list = []
-        for a.value in self.addresses:
+        for a in self.addresses:
             address_list.append(str(a.value))
         if address in address_list:
             print("This address alredy been added.")
@@ -24,7 +24,7 @@ class Record:
 
     def add_phone(self, phone):
         phones_list = []
-        for p.value in self.phones:
+        for p in self.phones:
             phones_list.append(str(p.value))
         if phone in phones_list:
             print("This num alredy been added.")
@@ -35,7 +35,7 @@ class Record:
 
     def add_mail(self, mail):
         mail_list = []
-        for m.value in self.emails:
+        for m in self.emails:
             mail_list.append(str(m.value))
         if mail in mail_list:
             print("This mail alredy been added.")
@@ -50,7 +50,7 @@ class Record:
         
     def change_adress(self, new_adres, old_adres):
         adress_list = []
-        for a.value in self.adresses:
+        for a in self.adresses:
             adress_list.append(str(a.value))
         if adress_list == [] or self.address == None:
             print("The list is empty")
@@ -64,7 +64,7 @@ class Record:
             
     def change_phone(self, new_num, old_num):
         phone_list = []
-        for p.value in self.phone:
+        for p in self.phone:
             phone_list.append(str(p.value))
         if phone_list == [] or self.phone == None:
             print("The list is empty")
@@ -78,7 +78,7 @@ class Record:
             
     def change_email(self, new_email, old_email):
         email_list = []
-        for p.value in self.email:
+        for p in self.email:
             email_list.append(str(p.value))
         if email_list == [] or self.email == None:
             print("The list is empty")
@@ -106,7 +106,7 @@ class Record:
         except:
             NameError("Email not listed")
         
-    def delete_adress(self, adress: Adress):
+    def delete_adress(self, adress: Address):
         try:
             self.adresses.remove(adress)
         except:
