@@ -155,10 +155,8 @@ class NotesBook(UserList):
         self.data.append({"id": self.id_note, "tag": self.tag,
                           "note": self.note})
 
-    def delete_note(self, *args: Note):
-        print(args)
-        for i in args:
-            print(type(i.get('id')))
+    def delete_note(self, notes):
+        for i in notes:
             print(f"Вы удалили заметку {self.data.pop(i.get('id') - 1)}")
 
     def search_parametr_note(self, note_parametr, user_parametr):
@@ -326,14 +324,15 @@ class Handler:
                 pass
             elif action.lower() in ["5", "delete", "remove", "видалити",
                                     "удалить", "стерти"]:
+                del_notes = self.action_search_note(notes_book)
                 print(f"Ви намагаєтесь видалити замітки:\n "
-                      f"{self.action_search_note(notes_book)}")
+                      f"{del_notes}")
                 flag_notes_delete = input("Якщо хочете видалити, напишіть"
                                           " + або так, для безпеки видаляйте "
                                           "за id: ")
-                if flag_notes_delete.lower() in ["+", "так", "хочу", "го"]:
-                    self.notes_book.delete_note(self.action_search_note(
-                        notes_book))
+                if flag_notes_delete.lower() in ["+", "так", "хочу", "го",
+                                                 "yes"]:
+                    self.notes_book.delete_note(del_notes)
             elif action.lower() in ["exit", "close", "good bye", "6", "вихід",
                                     "выход", "повернутись"]:
                 break
