@@ -150,7 +150,11 @@ class Handler:
                 if flag_notes_delete.lower() in ["+", "так", "хочу", "го",
                                                  "yes"]:
                     self.notes_book.delete_note(del_notes)
-            elif action.lower() in ["exit", "close", "good bye", "6", "вихід",
+                    print("Успішно видалено!")
+            elif action.lower() in ["сортувати", "sort", "сортування", "6",
+                                    "сортировка"]:
+                self.notes_book.sort_note()
+            elif action.lower() in ["exit", "close", "good bye", "7", "вихід",
                                     "выход", "повернутись"]:
                 break
             else:

@@ -2,6 +2,7 @@ from field import Note
 from collections import UserDict, UserList
 import re
 
+
 class NotesBook(UserList):
 
     def __init__(self):
@@ -24,7 +25,8 @@ class NotesBook(UserList):
 
     def delete_note(self, notes):
         for i in notes:
-            print(f"Вы удалили заметку {self.data.pop(i.get('id') - 1)}")
+            if i in self.data:
+                self.data.remove(i)
 
     def search_parametr_note(self, note_parametr, user_parametr):
         find_note = []
@@ -33,7 +35,7 @@ class NotesBook(UserList):
                 find_note.append(i)
         return find_note
 
-    def search_word_note(self, part_note):  # need to be impoves
+    def search_word_note(self, part_note):
         find_all_notes = []
         for i in self.data:
             if re.findall(part_note, str(i.get('note'))):
@@ -44,4 +46,4 @@ class NotesBook(UserList):
         pass
 
     def sort_note(self):
-        pass
+        self.data = sorted(self.data, key=lambda d: d['tag'])
