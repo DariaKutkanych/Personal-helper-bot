@@ -1,6 +1,8 @@
+from addressbook import AddressBook
+from field import Note
 from sort_files import sort_folder
 from prettytable.colortable import ColorTable, Themes
-from notes import Notesbook
+from notes import NotesBook
 
 
 class Menu:
@@ -88,34 +90,6 @@ class Menu:
                                   ["5. Повернутись в попереднє меню"]])
         return show_notes_menu
 
-    @property
-    def delete_menu(self):
-        show_delete = ColorTable(theme=Themes.OCEAN)
-        show_delete.field_names = [f"{18 * '-'}Що будем видаляти?{18 * '-'}"]
-        show_delete.hrules = 1
-        show_delete.align = "l"
-        show_delete.add_rows([["1. Телефон"],
-                              ["2. Емейл"],
-                              ["3. Адресу"],
-                              ["4. День народження"],
-                              ["5. Видалити контакт з книги"],
-                              ["6. Повернутись в попереднє меню"]])
-        return show_delete
-
-    @property
-    def notes_menu(self):
-        show_notes_menu = ColorTable(theme=Themes.OCEAN)
-        show_notes_menu.field_names = [f"{18 * '-'}Нотатки{18 * '-'}"]
-        show_notes_menu.hrules = 1
-        show_notes_menu.align = "l"
-        show_notes_menu.add_rows([["1. Подивитись всі нотатки"],
-                                  ["2. Додати нотатку"],
-                                  ["3. Знайти нотатку"],
-                                  ["4. Змінити нотатку"],
-                                  ["5. Видалити нотатку"],
-                                  ["6. Повернутись в попереднє меню"]])
-        return show_notes_menu
-
 
 class Handler:
 
@@ -156,16 +130,30 @@ class Handler:
 
             command = input("\033[34m" + "Обери потрібну команду(1-5), "
                                          "або я спробую вгадати: ")
+            user_text = set()
+            for el in command.split(' '):
+                user_text.add(el.lower())
 
-            if command.lower() in ["exit", "close", "good bye", "5", "вихід", "выход"]:
+            contact = {"1", "1.", "контакт", "контакты", "контакти", "contact"}
+            notes = {"2", "2.", "нотатки", "нотаткы", "notes", "нотатку", "замітки", "заметки"}
+            birthday = {"3", "3.", "іменниники", "імениники", "birthday", "народження", "рождения"}
+            sort = {"4", "4.", "сортувати", "sorted", "відсортувати", "посортувати", "сортировка", "sort"}
+            close = {"5", "5.", "закрити", "вийти", "exit", "close", "good bye", "вихід", "выход", "завершити"}
+
+            if len(user_text & contact) >= 1:
+                self.action_phone(self.address_book)
+
+            elif len(user_text & notes) >= 1:
+                self.main_action_note(self.notes_book)
+            elif len(user_text & birthday) >= 1:
+                pass
+            elif len(user_text & sort) >= 1:
+                 pass
+            elif len(user_text & close) >= 1:
                 print("Good bye!")
                 break
-
-            elif command.lower() in ["нотатки", "note", "notes", "2",
-                                     "замітки", "заметки"]:
-                self.action_note(self.notes_book)
-            elif command.lower() in ["phone", "телефон", "номер", "1", "number"]:
-                self.action_phone(self.address_book)
+            else:
+                print("Я Вас не зрозумів:(\nСпробуйте ще раз!")
 
 
 class Bot:
