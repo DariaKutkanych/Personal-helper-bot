@@ -94,5 +94,5 @@ def sort_folder(folder_path):
         create_sorted_folders(folder_path)
     except ValueError:
         "Please enter a correct path"
+        
     sort_docs(folder_path)
-#3
