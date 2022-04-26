@@ -52,10 +52,12 @@ class Record:
         adress_list = []
         for a.value in self.adresses:
             adress_list.append(str(a.value))
+        if adress_list == [] or self.address == None:
+            print("The list is empty")
         if old_adres in adress_list:
-            old_adress = Adress(old_adres)
+            old_adress = Address(old_adres)
             self.adresses.remove(old_adress)
-            new_adress = Adress(new_adres)
+            new_adress = Address(new_adres)
             self.adresses.append(new_adress)
         else:
             print(f"This adress {old_adres} is not in the list")
@@ -64,6 +66,8 @@ class Record:
         phone_list = []
         for p.value in self.phone:
             phone_list.append(str(p.value))
+        if phone_list == [] or self.phone == None:
+            print("The list is empty")
         if old_num in phone_list:
             old_phone = Phone(old_num)
             self.phones.remove(old_phone)
@@ -76,6 +80,8 @@ class Record:
         email_list = []
         for p.value in self.email:
             email_list.append(str(p.value))
+        if email_list == [] or self.email == None:
+            print("The list is empty")
         if old_email in email_list:
             old_mail = Email(old_email)
             self.emails.remove(old_mail)
