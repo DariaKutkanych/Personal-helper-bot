@@ -1,18 +1,46 @@
 from field import Note
 from collections import UserDict
 
-class NotesBook(UserDict):
+class NotesBook(UserList):
 
     def __init__(self):
+        super().__init__()
         self.data = []
+        self.note = ""
+        self.id_note = None
+        self.tag = ""
 
-    def add_note(self, note: Note):
-        self.note = note.value
-        self.added_note = {'id': len(self.data)+1, 'tag': '', 'note':
-                           self.note}
-        self.data.append(self.added_note)
-        flag_tag = input("Do you want to add tag for this note? Enter y, "
-                         "if yes otherwise enter n")
+    def __str__(self):
+        # need to add beautiful output like in future AddressBook
+        return f"{self.data}"
 
-    def search_note(self):
+    def add_note(self, note: Note, tag=""):
+        self.note = note
+        self.tag = tag
+        self.id_note = len(self.data) + 1
+        self.data.append({"id": self.id_note, "tag": self.tag,
+                          "note": self.note})
+
+    def delete_note(self, notes):
+        for i in notes:
+            print(f"Вы удалили заметку {self.data.pop(i.get('id') - 1)}")
+
+    def search_parametr_note(self, note_parametr, user_parametr):
+        find_note = []
+        for i in self.data:
+            if str(i.get(note_parametr)) == user_parametr:
+                find_note.append(i)
+        return find_note
+
+    def search_word_note(self, part_note):  # need to be impoves
+        find_all_notes = []
+        for i in self.data:
+            if re.findall(part_note, str(i.get('note'))):
+                find_all_notes.append(i)
+        return find_all_notes
+
+    def edit_note(self, note: Note):
+        pass
+
+    def sort_note(self):
         pass
