@@ -93,6 +93,7 @@ class Menu:
                                   ["7. Повернутись в попереднє меню"]])
         return show_notes_menu
 
+
     @property
     def search_note(self):
         show_edit = ColorTable(theme=Themes.OCEAN)
@@ -155,6 +156,7 @@ class Handler:
                 self.notes_book.sort_note()
             elif action.lower() in ["exit", "close", "good bye", "7", "вихід",
                                     "выход", "повернутись"]:
+              
                 break
             else:
                 print("Ви помилились або нотаток немає")
@@ -200,6 +202,7 @@ class Handler:
 
             if len(user_text & contact) >= 1:
                 self.action_phone(self.address_book)
+
             elif len(user_text & notes) >= 1:
                 self.main_action_note(self.notes_book)
             elif len(user_text & birthday) >= 1:
@@ -208,6 +211,7 @@ class Handler:
                 # Dasha this need changes
                 file_path = input('Введіть шлях до файлу')
                 sort_folder(file_path)
+
             elif len(user_text & close) >= 1:
                 print("Good bye!")
                 break
