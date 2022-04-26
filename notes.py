@@ -1,5 +1,6 @@
 from field import Note
-from collections import UserDict
+from collections import UserDict, UserList
+import re
 
 class NotesBook(UserList):
 
