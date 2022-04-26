@@ -1,9 +1,10 @@
 from addressbook import AddressBook
-from field import Note
+from field import Name, Phone, Email, Address, Birthday, Note
 from sort_files import sort_folder
 from prettytable.colortable import ColorTable, Themes
 from notes import NotesBook
 from notes import RecordNote
+from records import Record
 
 
 class Menu:
@@ -32,8 +33,9 @@ class Menu:
                                     ["2. Добавити дані до існуючого контакту"],
                                     ["3. Редагувати дані контакту"],
                                     ["4. Видалити дані з контакту"],
-                                    ["5. Повернутись в попереднє меню"],
-                                    ])
+                                    ["5. Пошук контакту"],
+                                    ["6. Вивести всі контакти"],
+                                    ["7. Повернутись в попереднє меню"]])
 
         return show_main_contact
 
@@ -97,7 +99,7 @@ class Menu:
     @property
     def search_note(self):
         show_edit = ColorTable(theme=Themes.OCEAN)
-        show_edit.field_names = [f"{18 * '-'}За яким критерієм будемо шукати?"
+        show_edit.field_names = [f"{18 * '-'}За яким критерієм?"
                                  f"{18 * '-'}"]
         show_edit.hrules = 1
         show_edit.align = "l"
@@ -119,42 +121,42 @@ class Handler:
     def main_action_note(self, notes_book: NotesBook):
         while True:
             print(self.menu.notes_menu)
-            action = input("\033[34m" + "Обери потрібну команду(1-5), "
-                                        "або я спробую вгадати: ")
-            if action.lower() in ["1", "check", "подивитись"]:
+            action = input("\033[34m" + "Обери потрібну команду(1-7), "
+                                        "або я спробую вгадати: ").lower()
+            if action in ["1", "check", "подивитись"]:
                 self.notes_book.print_note_book()
-            elif action.lower() in ["2", "create", "створити", "создать"]:
+            elif action in ["2", "create", "створити", "создать"]:
                 record_note = RecordNote()
                 record_note.add_note(Note(input('Введіть нонатку: '
                                                            '')))
                 flag_tag = input("Чи хочете ви додати тег до замітки? Введіть "
-                                 "так, якщо бажаєте, інакше ні: ")
-                if flag_tag.lower() in ["так", "yes", "да", "хочу"]:
+                                 "так, якщо бажаєте, інакше ні: ").lower()
+                if flag_tag in ["так", "yes", "да", "хочу"]:
                     record_note.add_tag(input('Введіть тег: '))
                 self.notes_book.add_record_note(record_note)
-            elif action.lower() in ["3", "знайти", "search", "пошук", "найти"]:
+            elif action in ["3", "знайти", "search", "пошук", "найти"]:
                 self.notes_book.print_note_book(self.action_search_note(
                     notes_book))
 
-            elif action.lower() in ["4", "edit", "редагувати", "змінити",
+            elif action in ["4", "edit", "редагувати", "змінити",
                                     "изменить"]:
                 pass
-            elif action.lower() in ["5", "delete", "remove", "видалити",
+            elif action in ["5", "delete", "remove", "видалити",
                                     "удалить", "стерти"]:
                 del_notes = self.action_search_note(notes_book)
                 print(f"Ви намагаєтесь видалити замітки:\n ")
                 self.notes_book.print_note_book.del_notes
                 flag_notes_delete = input("Якщо хочете видалити, напишіть"
                                           " + або так, для безпеки видаляйте "
-                                          "за id: ")
-                if flag_notes_delete.lower() in ["+", "так", "хочу", "го",
+                                          "за id: ").lower()
+                if flag_notes_delete in ["+", "так", "хочу", "го",
                                                  "yes"]:
                     self.notes_book.delete_note(del_notes)
                     print("Успішно видалено!")
-            elif action.lower() in ["сортувати", "sort", "сортування", "6",
+            elif action in ["сортувати", "sort", "сортування", "6",
                                     "сортировка"]:
                 self.notes_book.sort_note()
-            elif action.lower() in ["exit", "close", "good bye", "7", "вихід",
+            elif action in ["exit", "close", "good bye", "7", "вихід",
                                     "выход", "повернутись"]:
               
                 break
@@ -166,23 +168,62 @@ class Handler:
             print(self.menu.search_note)
 
             command = input("\033[34m" + "Обери потрібну команду(1-4), "
-                                         "або я спробую вгадати: ")
-            if command.lower() in ["id", "ид", "ід", "1"]:
+                                         "або я спробую вгадати: ").lower()
+            if command in ["id", "ид", "ід", "1"]:
                 id_parametr = input('Введіть id нотатки: ').lower()
                 return notes_book.search_parametr_note("id", id_parametr)
-            elif command.lower() in ["tag", "тег", "notes", "2"]:
+            elif command in ["tag", "тег", "notes", "2"]:
                 tag_parametr = input('Введіть tag нотатки: ').lower()
                 return notes_book.search_parametr_note("tag", tag_parametr)
-            elif command.lower() in ["головне", "main", "слово", "3"]:
+            elif command in ["головне", "main", "слово", "3"]:
                 word_parametr = input('Введіть головне слово нотатки: ')
                 return notes_book.search_word_note(word_parametr)
-            elif command.lower() in ["exit", "close", "good bye", "4",
+            elif command in ["exit", "close", "good bye", "4",
                                      "вихід", "выход", "повернутись"]:
                 print("Good bye!")
                 break
 
     def action_phone(self, address_book: AddressBook):
-        pass
+        while True:
+            print(self.menu.main_contact)
+            action = input("\033[34m" + "Обери потрібну команду(1-7), "
+                                        "або я спробую вгадати: ").lower()
+            if action in ["1", "create", "створити", "создать"]:
+                record_contact = Record(Name(input("Введіть ФІО контакту: ")))
+                self.address_book.add_record(record_contact)
+                self.address_book.add_record(self.action_add_contact(record_contact))
+            elif action in ["2", "add", "добавить", "додати"]:
+                pass
+            elif action in ["3", "edit", "редактировать", "редагувати"]:
+                pass
+            elif action in ["4", "delete", "удалить", "видалити"]:
+                pass
+            elif action in ["search", "пошук", "найти", "5"]:
+                pass
+            elif action in ["всі", "вивести", "все", "6"]:
+                print(address_book)
+            elif action in ["exit", "close", "good bye", "7",
+                            "вихід", "выход", "повернутись"]:
+                break
+
+    def action_add_contact(self, record_contact: Record):
+        while True:
+            print(self.menu.add_menu)
+            action = input("\033[34m" + "Обери потрібну команду(1-5), "
+                                        "або я спробую вгадати: ").lower()
+            if action in ["1", "телефон", "phone"]:
+                record_contact.add_phone(Phone(input("Введіть номер телефону: ")))
+            elif action in ["2", "email", "емаил"]:
+                record_contact.add_mail(Email(input("Введіть номер почту: ")))
+            elif action in ["3", "email", "емаил"]:
+                record_contact.add_address(Address(input("Введіть адресу: ")))
+            elif action in ["4", "дата", "рождение"]:
+                record_contact.add_address(Birthday(input("Введіть дату "
+                                                 "народження в форматі "
+                                                          "yyyy-mm-dd: ")))
+            elif action in ["exit", "close", "good bye", "5",
+                            "вихід", "выход", "повернутись"]:
+                break
 
     def main_action(self):
         while True:
@@ -202,7 +243,6 @@ class Handler:
 
             if len(user_text & contact) >= 1:
                 self.action_phone(self.address_book)
-
             elif len(user_text & notes) >= 1:
                 self.main_action_note(self.notes_book)
             elif len(user_text & birthday) >= 1:
