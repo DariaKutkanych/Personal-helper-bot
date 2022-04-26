@@ -112,10 +112,7 @@ class Handler:
         self.menu = Menu()
         self.notes_book = notes_book
         self.address_book = address_book
-        while True:
-            if self.main_action() is None:
-                break
-            self.main_action()
+        self.main_action()
 
     def main_action_note(self, notes_book: NotesBook):
         self.notes_book = notes_book
