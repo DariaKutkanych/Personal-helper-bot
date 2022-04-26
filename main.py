@@ -3,6 +3,7 @@ from field import Note
 from sort_files import sort_folder
 from prettytable.colortable import ColorTable, Themes
 from notes import NotesBook
+from notes import RecordNote
 
 
 class Menu:
@@ -115,32 +116,33 @@ class Handler:
         self.main_action()
 
     def main_action_note(self, notes_book: NotesBook):
-        self.notes_book = notes_book
         while True:
             print(self.menu.notes_menu)
             action = input("\033[34m" + "Обери потрібну команду(1-5), "
                                         "або я спробую вгадати: ")
             if action.lower() in ["1", "check", "подивитись"]:
-                print(notes_book)
+                self.notes_book.print_note_book()
             elif action.lower() in ["2", "create", "створити", "создать"]:
-                note = Note(input('Введіть нонатку: '))
+                record_note = RecordNote()
+                record_note.add_note(Note(input('Введіть нонатку: '
+                                                           '')))
                 flag_tag = input("Чи хочете ви додати тег до замітки? Введіть "
                                  "так, якщо бажаєте, інакше ні: ")
                 if flag_tag.lower() in ["так", "yes", "да", "хочу"]:
-                    tag_note = input('Введіть тег: ')
-                    self.notes_book.add_note(note, tag_note)
-                else:
-                    self.notes_book.add_note(note)
+                    record_note.add_tag(input('Введіть тег: '))
+                self.notes_book.add_record_note(record_note)
             elif action.lower() in ["3", "знайти", "search", "пошук", "найти"]:
-                print(self.action_search_note(notes_book))
+                self.notes_book.print_note_book(self.action_search_note(
+                    notes_book))
+
             elif action.lower() in ["4", "edit", "редагувати", "змінити",
                                     "изменить"]:
                 pass
             elif action.lower() in ["5", "delete", "remove", "видалити",
                                     "удалить", "стерти"]:
                 del_notes = self.action_search_note(notes_book)
-                print(f"Ви намагаєтесь видалити замітки:\n "
-                      f"{del_notes}")
+                print(f"Ви намагаєтесь видалити замітки:\n ")
+                self.notes_book.print_note_book.del_notes
                 flag_notes_delete = input("Якщо хочете видалити, напишіть"
                                           " + або так, для безпеки видаляйте "
                                           "за id: ")
@@ -164,10 +166,10 @@ class Handler:
             command = input("\033[34m" + "Обери потрібну команду(1-4), "
                                          "або я спробую вгадати: ")
             if command.lower() in ["id", "ид", "ід", "1"]:
-                id_parametr = input('Введіть id нотатки: ')
+                id_parametr = input('Введіть id нотатки: ').lower()
                 return notes_book.search_parametr_note("id", id_parametr)
             elif command.lower() in ["tag", "тег", "notes", "2"]:
-                tag_parametr = input('Введіть tag нотатки: ')
+                tag_parametr = input('Введіть tag нотатки: ').lower()
                 return notes_book.search_parametr_note("tag", tag_parametr)
             elif command.lower() in ["головне", "main", "слово", "3"]:
                 word_parametr = input('Введіть головне слово нотатки: ')

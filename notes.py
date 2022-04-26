@@ -1,49 +1,63 @@
 from field import Note
 from collections import UserDict, UserList
 import re
+from records_note import RecordNote, Note
 
 
-class NotesBook(UserList):
+class NotesBook(UserDict):
 
     def __init__(self):
         super().__init__()
-        self.data = []
-        self.id_note = None
-        self.tag = ""
-        self.note = ""
+        self.data = {}
 
     def __str__(self):
-        # need to add beautiful output like in future AddressBook
         return f"{self.data}"
 
-    def add_note(self, note: Note, tag=""):
-        self.note = note
-        self.tag = tag
-        self.id_note = len(self.data) + 1
-        self.data.append({"id": self.id_note, "tag": self.tag,
-                          "note": self.note})
+    def print_note_book(self, data = None):
+        if data and isinstance(data, list) :
+            for i in data:
+                print(f"id: {i.id_record_note}, tag: {i.tag}, note: "
+                      f"{i.note}")
+        else:
+            for keys_note in self.data.keys():
+                print(f"id: {self.data.get(keys_note).id_record_note}   "
+                      f"tag: {self.data.get(keys_note).tag}   "
+                      f"note: {self.data.get(keys_note).note}   ")
+
+    def add_record_note(self, record_note: RecordNote):
+        self.data[record_note.id_record_note] = record_note
 
     def delete_note(self, notes):
         for i in notes:
-            if i in self.data:
-                self.data.remove(i)
+            if i.id_record_note in self.data.keys():
+                self.data.pop(i.id_record_note, "Таких заміток нема")
 
     def search_parametr_note(self, note_parametr, user_parametr):
         find_note = []
-        for i in self.data:
-            if str(i.get(note_parametr)) == user_parametr:
-                find_note.append(i)
+        if note_parametr == "tag":
+            for keys_note in self.data.keys():
+                if str(self.data.get(keys_note).tag) == user_parametr:
+                    find_note.append(self.data.get(keys_note))
+        else:
+            for keys_note in self.data.keys():
+                if str(self.data.get(keys_note).id_record_note) == user_parametr:
+                    find_note.append(self.data.get(keys_note))
         return find_note
 
     def search_word_note(self, part_note):
         find_all_notes = []
+        for keys_note in self.data.keys():
+            if re.findall(part_note, str(self.data.get(
+                    keys_note).note)):
+                find_all_notes.append(self.data.get(keys_note))
+
         for i in self.data:
             if re.findall(part_note, str(i.get('note'))):
-                find_all_notes.append(i)
+                find_all_notes.append(self.data.get(keys_note))
         return find_all_notes
 
-    def edit_note(self, note: Note):
+    def edit_note(self):
         pass
 
     def sort_note(self):
-        self.data = sorted(self.data, key=lambda d: d['tag'])
+        self.data = dict(sorted(self.data.items(), key=lambda val:val[1].tag))
