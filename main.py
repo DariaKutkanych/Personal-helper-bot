@@ -175,8 +175,86 @@ class Handler:
                 return notes_book.search_parametr_note("tag", tag_parametr)
             elif command.lower() in ["головне", "main", "слово", "3"]:
                 word_parametr = input('Введіть головне слово нотатки: ')
+<<<<<<< Updated upstream
                 return notes_book.search_word_note(word_parametr)
             elif command.lower() in ["exit", "close", "good bye", "4",
+=======
+                self.notes_book.search_word_note(word_parametr)
+            elif len(user_text & close) >= 1:
+                print("Good bye!")
+                break
+            else:
+                print("Я Вас не зрозумів:(\nСпробуйте ще раз!")
+
+    def action_phone(self):
+        while True:
+            print(self.menu.main_contact)
+            action = input("\033[34m" + "Обери потрібну команду(1-7), "
+                                        "або я спробую вгадати: ")
+
+            user_text = set()
+            for el in action.split(' '):
+                user_text.add(el.lower())
+
+            create_phone = {"1", "1.", "create", "створити", "создать", "записати"}
+            add_phone = {"2", "2.", "існуючого", "добавити до", "більше"}
+            edit_phone = {"3", "3.", "редагувати", "редактировать", "edit", "змінити"}
+            delete_phone = {"4", "4.", "удалить", "видалити", "стерти", "delete"}
+            search_phone = {"5", "5.", "search", "пошук", "найти", "знайти", "шукати"}
+            show_phone = {"6", "6.", "вивести", "показати", "всі", "подивитись"}
+            close = {"7", "7.", "закрити", "вийти", "exit", "close", "попереднє", "вихід", "выход", "повернутись",
+                     "назад"}
+
+            if len(user_text & create_phone) >= 1:
+                record_contact = Record(Name(input("Введіть ФІО контакту: ")))
+                self.address_book.add_record(self.action_add_contact(record_contact))
+            elif len(user_text & add_phone) >= 1:
+                pass
+            elif len(user_text & edit_phone) >= 1:
+                pass
+            elif len(user_text & delete_phone) >= 1:
+                pass
+            elif len(user_text & search_phone) >= 1:
+                print(self.action_search_phone())
+            elif len(user_text & show_phone) >= 1:
+                print(self.address_book)
+            elif len(user_text & close) >= 1:
+                break
+            else:
+                print("Я Вас не зрозумів:(\nСпробуйте ще раз!")
+
+    def action_add_contact(self, record_contact: Record):
+        while True:
+            print(self.menu.add_menu)
+            action = input("\033[34m" + "Обери потрібну команду(1-5), "
+                                        "або я спробую вгадати: ").lower()
+
+            if action in ["1", "телефон", "phone"]:
+                record_contact.add_phone(Phone(input("Введіть номер телефону: ")))
+            elif action in ["2", "email", "емаил"]:
+                record_contact.add_mail(Email(input("Введіть номер почту: ")))
+            elif action in ["3", "email", "емаил"]:
+                record_contact.add_address(Address(input("Введіть адресу: ")))
+            elif action in ["4", "дата", "рождение"]:
+                record_contact.add_address(Birthday(input("Введіть дату "
+                                                 "народження в форматі "
+                                                          "yyyy-mm-dd: ")))
+            elif action in ["5", "5.", "попереднє", "вихід", "выход", "повернутись", "назад"]:
+                break
+            else:
+                print("Я Вас не зрозумів:(\nСпробуйте ще раз!")
+
+    def action_search_phone(self):
+        while True:
+            print(self.menu.edit_menu)
+
+            command = input("\033[34m" + "Обери потрібну команду(1-4), "
+                                         "або я спробую вгадати: ").lower()
+            if command in ["телефон", "phone", "1"]:
+                name_parametr = input('Введіть ФІО контакту: ').lower()
+                self.address_book.search_by_name(name_parametr)
+            elif command in ["exit", "close", "good bye", "4",
+>>>>>>> Stashed changes
                                      "вихід", "выход", "повернутись"]:
                 print("Good bye!")
                 break
@@ -198,10 +276,34 @@ class Handler:
             notes = {"2", "2.", "нотатки", "нотаткы", "notes", "нотатку", "замітки", "заметки"}
             birthday = {"3", "3.", "іменниники", "імениники", "birthday", "народження", "рождения"}
             sort = {"4", "4.", "сортувати", "sorted", "відсортувати", "посортувати", "сортировка", "sort"}
+<<<<<<< Updated upstream
             close = {"5", "5.", "закрити", "вийти", "exit", "close", "good bye", "вихід", "выход", "завершити"}
 
             if len(user_text & contact) >= 1:
                 self.action_phone(self.address_book)
+=======
+            save_info = {"5", "5.", "зберегти", "save", "збереження", "сохранение"}
+            load_info = {"6", "6.", "відкрити", "load", "відкриття", "открытие"}  
+            close = {"7", "7.", "закрити", "вийти", "exit", "close", "good bye", "вихід", "выход", "завершити"}
+            check_notes = {"check", "подивитись", "посмотреть"}
+            sor_notes = {"сортувати", "sort", "сортування", "сортировка", "выдсортувати"}
+            create = {"create", "створити", "создать", "записати"}
+
+            if len(user_text & contact) >= 1:
+                if len(user_text & create) >= 1:
+                    record_contact = Record(Name(input("Введіть ФІО контакту: ")))
+                    self.address_book.add_record(self.action_add_contact(record_contact))
+                else:
+                    self.action_phone()
+            elif len(user_text & notes) >= 1:
+
+                if len(user_text & check_notes) >= 1:
+                    self.notes_book.print_note_book()
+                elif len(user_text & sor_notes) >= 1:
+                    self.notes_book.sort_note()
+                else:
+                    self.main_action_note()
+>>>>>>> Stashed changes
 
             elif len(user_text & notes) >= 1:
                 self.main_action_note(self.notes_book)

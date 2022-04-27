@@ -11,12 +11,17 @@ class Record:
         self.emails = []
         self.birthday = birthday
 
-    def add_address(self, address):
-        address_list = []
-        for a in self.addresses:
-            address_list.append(str(a.value))
-        if address in address_list:
-            print("This address alredy been added.")
+    def add_address(self, address = None):
+        if address:
+            address_list = []
+            for a.value in self.addresses:
+                address_list.append(str(a.value))
+            if address in address_list:
+                print("This address alredy been added.")
+            else:
+                new_address = Address(address)
+                self.addresses.append(new_address)
+                print(f"for {self.name} add address {address}.")
         else:
             new_address = Address(address)
             self.addresses.append(address)
@@ -24,7 +29,7 @@ class Record:
 
     def add_phone(self, phone):
         phones_list = []
-        for p in self.phones:
+        for p.value in self.phones:
             phones_list.append(str(p.value))
         if phone in phones_list:
             print("This num alredy been added.")
@@ -35,7 +40,7 @@ class Record:
 
     def add_mail(self, mail):
         mail_list = []
-        for m in self.emails:
+        for m.value in self.emails:
             mail_list.append(str(m.value))
         if mail in mail_list:
             print("This mail alredy been added.")
@@ -47,6 +52,7 @@ class Record:
     def add_birthday(self, bd):
         self.birthday = Birthday(bd)
         print(f"{self.name} was born {bd}.")
+<<<<<<< Updated upstream
         
     def change_adress(self, new_adres, old_adres):
         adress_list = []
@@ -111,3 +117,12 @@ class Record:
             self.adresses.remove(adress)
         except:
             NameError("Adress not listed")
+=======
+    
+    def __getstate__(self):
+        attributes = self.__dict__.copy()
+        return attributes
+
+    def __setstate__(self, value):
+        self.__dict__ = value
+>>>>>>> Stashed changes

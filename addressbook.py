@@ -12,6 +12,7 @@ class AddressBook(UserDict):
         else:
             print("try add Record.")
 
+<<<<<<< Updated upstream
     def get_bd(self, day):
         now = datetime.datetime.now()
         delta = now + datetime.timedelta(days=day)
@@ -24,6 +25,25 @@ class AddressBook(UserDict):
                         birthday_people.append(k)
         print(birthday_people)
         
+=======
+
+    def get_bd(self, day=None):
+        if day.isdigit():
+            now = datetime.datetime.now()
+            delta = now + datetime.timedelta(days=int(day))
+            birthday_people = []
+            for k, v in self.data.items():
+                for el in v:
+                    if isinstance(el, Birthday):
+                        date_val = (el.value).replace(year=now.year)
+                        if now < date_val.replace(hour=23, minute=59, second=59, microsecond=0) < delta:
+                            birthday_people.append(k)
+            print(birthday_people)
+        else:
+            d = input("Enter for what period to show birthdays: ")
+            self.get_bd(d)
+
+>>>>>>> Stashed changes
     def search_by_name(self, surname):
         for i in self.data.name:
             if i.value == surname:
