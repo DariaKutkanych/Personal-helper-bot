@@ -255,13 +255,13 @@ class Handler:
                                         "або я спробую вгадати: ").lower()
 
             if action in ["1", "телефон", "phone"]:
-                record_contact.add_phone(Phone(input("Введіть номер телефону: ")))
+                record_contact.add_phone((input("Введіть номер телефону: ")))
             elif action in ["2", "email", "емаил"]:
-                record_contact.add_mail(Email(input("Введіть номер почту: ")))
+                record_contact.add_mail((input("Введіть номер почту: ")))
             elif action in ["3", "email", "емаил"]:
-                record_contact.add_address(Address(input("Введіть адресу: ")))
+                record_contact.add_address((input("Введіть адресу: ")))
             elif action in ["4", "дата", "рождение"]:
-                record_contact.add_address(Birthday(input("Введіть дату "
+                record_contact.add_address((input("Введіть дату "
                                                  "народження в форматі "
                                                           "yyyy-mm-dd: ")))
             elif action in ["5", "5.", "попереднє", "вихід", "выход", "повернутись", "назад"]:
