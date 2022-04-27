@@ -13,13 +13,13 @@ class Record:
 
     def add_address(self, address):
         address_list = []
-        for a.value in self.addresses:
-            address_list.append(str(a.value))
+        for address in self.addresses:
+            address_list.append(str(address.value))
         if address in address_list:
             print("This address alredy been added.")
         else:
             new_address = Address(address)
-            self.addresses.append(address)
+            self.addresses.append(new_address)
             print(f"for {self.name} add address {address}.")
 
     def add_phone(self, phone):
