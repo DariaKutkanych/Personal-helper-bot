@@ -11,7 +11,7 @@ class AddressBook(UserDict):
                 set.name, (set.addresses, set.phones, set.emails, set.birthday))
         else:
             print("try add Record.")
-
+            
     def get_bd(self, day):
         now = datetime.datetime.now()
         delta = now + datetime.timedelta(days=day)
@@ -24,27 +24,38 @@ class AddressBook(UserDict):
                         birthday_people.append(k)
         print(birthday_people)
         
+
+    def get_bd(self, day=None):
+        if day.isdigit():
+            now = datetime.datetime.now()
+            delta = now + datetime.timedelta(days=int(day))
+            birthday_people = []
+            for k, v in self.data.items():
+                for el in v:
+                    if isinstance(el, Birthday):
+                        date_val = (el.value).replace(year=now.year)
+                        if now < date_val.replace(hour=23, minute=59, second=59, microsecond=0) < delta:
+                            birthday_people.append(k)
+            print(birthday_people)
+        else:
+            d = input("Enter for what period to show birthdays: ")
+            self.get_bd(d)
+
     def search_by_name(self, surname):
-        for i in self.data.name:
-            if i.value == surname:
-                return self.data[self.data.name.index(surname)]
-        return f"There is no contact with this name"
-    
+        pass
+
     def search_by_phone(self, number):
-        for i in self.data.phone:
-            if i.value == number:
-                return self.data[self.data.phone.index(number)]
-        return f"There is no contact with this phone"
-    
+        pass
+
     def search_by_email(self, mail):
-        for i in self.data.emails:
-            if i.value == mail:
-                return self.data[self.data.emails.index(mail)]
-        return f"There is no contact with this email"
-    
+        pass
+
     def search_by_address(self, adres):
-        for i in self.data.addresses:
-            if i.value == adres:
-                return self.data[self.data.addresses.index(adres)]
-        return f"There is no contact with this email"
-        
+        pass
+
+    def __getstate__(self):
+        attributes = self.__dict__.copy()
+        return attributes
+
+    def __setstate__(self, value):
+        self.__dict__ = value
