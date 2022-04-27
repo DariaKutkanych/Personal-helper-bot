@@ -2,8 +2,7 @@ from addressbook import AddressBook
 from field import Name, Phone, Email, Address, Birthday, Note
 from sort_files import sort_folder
 from prettytable.colortable import ColorTable, Themes
-from notes import NotesBook
-from notes import RecordNote
+from notes import NotesBook, RecordNote
 from records import Record
 
 
@@ -82,19 +81,19 @@ class Menu:
                                   ["7. Повернутись в попереднє меню"]])
         return show_notes_menu
 
-
     @property
     def search_note(self):
-        show_edit = ColorTable(theme=Themes.OCEAN)
-        show_edit.field_names = [f"{18 * '-'}За яким критерієм?"
+
+        show_search = ColorTable(theme=Themes.OCEAN)
+        show_search.field_names = [f"{18 * '-'}За яким критерієм будемо шукати?"
                                  f"{18 * '-'}"]
-        show_edit.hrules = 1
-        show_edit.align = "l"
-        show_edit.add_rows([["1. По id замітки"],
+        show_search.hrules = 1
+        show_search.align = "l"
+        show_search.add_rows([["1. По id замітки"],
                             ["2. По тегу замітки"],
                             ["3. По головному слову"],
                             ["4. Повернутись в попереднє меню"]])
-        return show_edit
+        return show_search
 
 
 class Handler:
@@ -108,11 +107,26 @@ class Handler:
     def main_action_note(self):
         while True:
             print(self.menu.notes_menu)
-            action = input("\033[34m" + "Обери потрібну команду(1-7), "
-                                        "або я спробую вгадати: ").lower()
-            if action in ["1", "check", "подивитись"]:
+
+            action = input("\033[34m" + "Обери потрібну команду(1-5), "
+                                        "або я спробую вгадати: ")
+
+            user_text = set()
+            for el in action.split(' '):
+                user_text.add(el.lower())
+
+            check_notes = {"1", "1.", "check", "подивитись", "посмотреть"}
+            create_notes = {"2", "2.", "create", "створити", "создать"}
+            search_notes = {"3", "3.", "знайти", "search", "пошук", "найти", "шукаю"}
+            edit_notes = {"4", "4.", "редагувати", "змінити", "изменить", "заменить", "edit"}
+            delete_notes = {"5", "5.", "delete", "remove", "видалити", "удалить", "стерти"}
+            sor_notes = {"6", "6.", "сортувати", "sort", "сортування", "сортировка", "выдсортувати"}
+            close = {"7", "7.", "закрити", "вийти", "попереднє", "вихід", "выход", "повернутись", "назад"}
+
+            if len(user_text & check_notes) >= 1:
                 self.notes_book.print_note_book()
-            elif action in ["2", "create", "створити", "создать"]:
+
+            elif len(user_text & create_notes) >= 1:
                 record_note = RecordNote()
                 record_note.add_note(Note(input('Введіть нонатку: '
                                                            '')))
@@ -121,14 +135,16 @@ class Handler:
                 if flag_tag in ["так", "yes", "да", "хочу"]:
                     record_note.add_tag(input('Введіть тег: '))
                 self.notes_book.add_record_note(record_note)
-            elif action in ["3", "знайти", "search", "пошук", "найти"]:
-                self.notes_book.print_note_book(self.action_search_note())
-            elif action in ["4", "edit", "редагувати", "змінити",
-                                    "изменить"]:
+
+            elif len(user_text & search_notes) >= 1:
+                self.notes_book.print_note_book(self.action_search_note(
+                    notes_book))
+
+            elif len(user_text & edit_notes) >= 1:
                 pass
-            elif action in ["5", "delete", "remove", "видалити",
-                                    "удалить", "стерти"]:
-                del_notes = self.action_search_note(self.notes_book)
+
+            elif len(user_text & delete_notes) >= 1:
+                del_notes = self.action_search_note(notes_book)
                 print(f"Ви намагаєтесь видалити замітки:\n ")
                 self.notes_book.print_note_book.del_notes
                 flag_notes_delete = input("Якщо хочете видалити, напишіть"
@@ -138,12 +154,10 @@ class Handler:
                                                  "yes"]:
                     self.notes_book.delete_note(del_notes)
                     print("Успішно видалено!")
-            elif action in ["сортувати", "sort", "сортування", "6",
-                                    "сортировка"]:
+
+            elif len(user_text & sor_notes) >= 1:
                 self.notes_book.sort_note()
-            elif action in ["exit", "close", "good bye", "7", "вихід",
-                                    "выход", "повернутись"]:
-              
+            elif len(user_text & close) >= 1:
                 break
             else:
                 print("Ви помилились або нотаток немає")
@@ -153,20 +167,31 @@ class Handler:
             print(self.menu.search_note)
 
             command = input("\033[34m" + "Обери потрібну команду(1-4), "
-                                         "або я спробую вгадати: ").lower()
-            if command in ["id", "ид", "ід", "1"]:
+                                         "або я спробую вгадати: ")
+            user_text = set()
+            for el in command.split(' '):
+                user_text.add(el.lower())
+
+            id_notes = {"1", "1.", "id", "ід", "ид"}
+            teg_notes = {"2", "2.", "тег", "tag", "тегу"}
+            head_notes = {"3", "3.", "головному", "головне", "главному", "main"}
+            close = {"4", "4.", "закрити", "вийти", "exit", "close", "попереднє", "вихід", "выход", "повернутись",
+                     "назад"}
+
+            if len(user_text & id_notes) >= 1:
                 id_parametr = input('Введіть id нотатки: ').lower()
-                return self.notes_book.search_parametr_note("id", id_parametr)
-            elif command in ["tag", "тег", "notes", "2"]:
+                return notes_book.search_parametr_note("id", id_parametr)
+            elif len(user_text & teg_notes) >= 1:
                 tag_parametr = input('Введіть tag нотатки: ').lower()
-                return self.notes_book.search_parametr_note("tag", tag_parametr)
-            elif command in ["головне", "main", "слово", "3"]:
+                return notes_book.search_parametr_note("tag", tag_parametr)
+            elif len(user_text & head_notes) >= 1:
                 word_parametr = input('Введіть головне слово нотатки: ')
-                return self.notes_book.search_word_note(word_parametr)
-            elif command in ["exit", "close", "good bye", "4",
-                                     "вихід", "выход", "повернутись"]:
+                return notes_book.search_word_note(word_parametr)
+            elif len(user_text & close) >= 1:
                 print("Good bye!")
                 break
+            else:
+                print("Я Вас не зрозумів:(\nСпробуйте ще раз!")
 
     def action_phone(self):
         while True:
@@ -239,13 +264,24 @@ class Handler:
             sort = {"4", "4.", "сортувати", "sorted", "відсортувати", "посортувати", "сортировка", "sort"}
             close = {"5", "5.", "закрити", "вийти", "exit", "close", "good bye", "вихід", "выход", "завершити"}
 
+            check_notes = {"check", "подивитись", "посмотреть"}
+            sor_notes = {"сортувати", "sort", "сортування", "сортировка", "выдсортувати"}
+
             if len(user_text & contact) >= 1:
                 self.action_phone()
             elif len(user_text & notes) >= 1:
-                self.main_action_note()
+              
+                if len(user_text & check_notes) >= 1:
+                    self.notes_book.print_note_book()
+                elif len(user_text & sor_notes) >= 1:
+                    self.notes_book.sort_note()
+                else:
+                    self.main_action_note(self.notes_book)
+
             elif len(user_text & birthday) >= 1:
                 self.address_book.get_bd(input("Введіть клількість днів за "
                                                "яких показати іменинників? "))
+
             elif len(user_text & sort) >= 1:
                 # Dasha this need changes
                 file_path = input('Введіть шлях до файлу')
