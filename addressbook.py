@@ -20,6 +20,19 @@ class AddressBook(UserDict):
             for el in v:
                 if isinstance(el, Birthday):
                     date_val = (el.value).replace(year=now.year)
-                    if now < date_val.replace(hour=23, minute=59, second=59, microsecond=0) < delta:
+                    if now < date_val.replace(hour=23, minute=59, second=59,
+                                              microsecond=0) < delta:
                         birthday_people.append(k)
         print(birthday_people)
+
+    def search_by_name(self, surname):
+        pass
+
+    def search_by_phone(self, number):
+        pass
+
+    def search_by_email(self, mail):
+        pass
+
+    def search_by_address(self, adres):
+        pass
