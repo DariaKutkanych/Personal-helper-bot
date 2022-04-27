@@ -246,7 +246,8 @@ class Handler:
             elif len(user_text & notes) >= 1:
                 self.main_action_note()
             elif len(user_text & birthday) >= 1:
-                pass
+                self.address_book.get_bd(input("Введіть клількість днів за "
+                                               "яких показати іменинників? "))
             elif len(user_text & sort) >= 1:
                 # Dasha this need changes
                 file_path = input('Введіть шлях до файлу')
