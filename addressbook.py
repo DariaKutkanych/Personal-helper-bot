@@ -14,7 +14,7 @@ class AddressBook(UserDict):
 
 
     def get_bd(self, day=None):
-        if day:
+        if day.if day.isdigit():
             now = datetime.datetime.now()
             delta = now + datetime.timedelta(days=int(day))
             birthday_people = []
