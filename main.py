@@ -138,6 +138,18 @@ class Handler:
                     record_note.add_tag(input('Введіть тег: '))
                 self.notes_book.add_record_note(record_note)
 
+
+            elif action in ["3", "знайти", "search", "пошук", "найти"]:
+                self.notes_book.print_note_book(self.action_search_note())
+            elif action in ["4", "edit", "редагувати", "змінити",
+                                    "изменить"]:
+                pass
+            elif action in ["5", "delete", "remove", "видалити",
+                                    "удалить", "стерти"]:
+                del_note = self.action_search_note()
+                print(f"Ви намагаєтесь видалити замітки:")
+                self.notes_book.print_note_book(del_note)
+                
             elif len(user_text & search_notes) >= 1:
                 self.notes_book.print_note_book(self.action_search_note(
                     self.notes_book))
@@ -146,12 +158,13 @@ class Handler:
                 del_notes = self.action_search_note(self.notes_book)
                 print(f"Ви намагаєтесь видалити замітки:\n ")
                 self.notes_book.print_note_book.del_notes
+
                 flag_notes_delete = input("Якщо хочете видалити, напишіть"
-                                          "так, для безпеки видаляйте "
+                                          " так, для безпеки видаляйте "
                                           "за id: ").lower()
                 if flag_notes_delete in ["+", "так", "хочу", "го",
                                                  "yes"]:
-                    self.notes_book.delete_note(del_notes)
+                    self.notes_book.delete_note(del_note)
                     print("Успішно видалено!")
 
             elif len(user_text & sor_notes) >= 1:

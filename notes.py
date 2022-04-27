@@ -7,7 +7,6 @@ class NotesBook(UserDict):
 
     def __init__(self):
         super().__init__()
-        self.data = {}
 
     def __str__(self):
         return f"{self.data}"
