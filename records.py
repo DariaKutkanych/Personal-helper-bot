@@ -47,3 +47,10 @@ class Record:
     def add_birthday(self, bd):
         self.birthday = Birthday(bd)
         print(f"{self.name} was born {bd}.")
+    
+    def __getstate__(self):
+        attributes = self.__dict__.copy()
+        return attributes
+
+    def __setstate__(self, value):
+        self.__dict__ = value

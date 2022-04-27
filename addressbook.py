@@ -40,3 +40,10 @@ class AddressBook(UserDict):
 
     def search_by_address(self, adres):
         pass
+
+    def __getstate__(self):
+        attributes = self.__dict__.copy()
+        return attributes
+
+    def __setstate__(self, value):
+        self.__dict__ = value

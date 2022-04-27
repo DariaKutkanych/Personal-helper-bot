@@ -1,7 +1,6 @@
-from field import Note
 from collections import UserDict, UserList
 import re
-from records_note import RecordNote, Note
+from records_note import RecordNote
 
 
 class NotesBook(UserDict):
@@ -57,3 +56,10 @@ class NotesBook(UserDict):
 
     def sort_note(self):
         self.data = dict(sorted(self.data.items(), key=lambda val:val[1].tag))
+    
+    def __getstate__(self):
+        attributes = self.__dict__.copy()
+        return attributes
+
+    def __setstate__(self, value):
+        self.__dict__ = value
