@@ -2,6 +2,7 @@ from field import Note
 
 
 class RecordNote:
+    
     count_record_note = 0
 
     def __init__(self):

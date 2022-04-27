@@ -28,18 +28,32 @@ class AddressBook(UserDict):
         else:
             d = input("На скільки днів уперед показати іменинників?")
             self.get_bd(d)
-            
-    def search_by_name(self, surname):
-        pass
+
+    def search_by(self, text, list_name=None):  
+        result = []
+
+        for user in self.data.values():
+            if list_name:
+                if text in user.name.value:
+                    result.append(user)
+            else:
+                if [type for type in user.list_name if text in type.value]:
+                    result.append(user)
+
+        print(result, text)
+        return result, text
+
+    def search_by_name(self, text):
+        self.search_by(text)
 
     def search_by_phone(self, number):
-        pass
+        self.search_by(number, "phones")
 
     def search_by_email(self, mail):
-        pass
+        self.search_by(mail, "emails")
 
-    def search_by_address(self, adres):
-        pass
+    def search_by_address(self, address):
+        self.search_by(address, "addresses")
 
     def __getstate__(self):
         attributes = self.__dict__.copy()
