@@ -50,10 +50,6 @@ class NotesBook(UserDict):
             if re.findall(part_note, str(self.data.get(
                     keys_note).note)):
                 find_all_notes.append(self.data.get(keys_note))
-
-        for i in self.data:
-            if re.findall(part_note, str(i.get('note'))):
-                find_all_notes.append(self.data.get(keys_note))
         return find_all_notes
 
     def edit_note(self):
