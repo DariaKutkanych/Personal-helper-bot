@@ -128,15 +128,15 @@ class Handler:
                 pass
             elif action in ["5", "delete", "remove", "видалити",
                                     "удалить", "стерти"]:
-                del_notes = self.action_search_note(self.notes_book)
-                print(f"Ви намагаєтесь видалити замітки:\n ")
-                self.notes_book.print_note_book.del_notes
+                del_note = self.action_search_note()
+                print(f"Ви намагаєтесь видалити замітки:")
+                self.notes_book.print_note_book(del_note)
                 flag_notes_delete = input("Якщо хочете видалити, напишіть"
-                                          "так, для безпеки видаляйте "
+                                          " так, для безпеки видаляйте "
                                           "за id: ").lower()
                 if flag_notes_delete in ["+", "так", "хочу", "го",
                                                  "yes"]:
-                    self.notes_book.delete_note(del_notes)
+                    self.notes_book.delete_note(del_note)
                     print("Успішно видалено!")
             elif action in ["сортувати", "sort", "сортування", "6",
                                     "сортировка"]:
