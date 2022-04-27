@@ -30,16 +30,28 @@ class AddressBook(UserDict):
             self.get_bd(d)
 
     def search_by_name(self, surname):
-        pass
-
+        for i in self.data.name:
+            if i.value == surname:
+                return self.data[self.data.name.index(surname)]
+        return f"There is no contact with this name"
+    
     def search_by_phone(self, number):
-        pass
-
+        for i in self.data.phone:
+            if i.value == number:
+                return self.data[self.data.phone.index(number)]
+        return f"There is no contact with this phone"
+    
     def search_by_email(self, mail):
-        pass
-
+        for i in self.data.emails:
+            if i.value == mail:
+                return self.data[self.data.emails.index(mail)]
+        return f"There is no contact with this email"
+    
     def search_by_address(self, adres):
-        pass
+        for i in self.data.addresses:
+            if i.value == adres:
+                return self.data[self.data.addresses.index(adres)]
+        return f"There is no contact with this email"
 
     def __getstate__(self):
         attributes = self.__dict__.copy()

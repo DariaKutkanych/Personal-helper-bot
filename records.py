@@ -53,6 +53,70 @@ class Record:
         self.birthday = Birthday(bd)
         print(f"{self.name} was born {bd}.")
     
+    def change_adress(self, new_adres, old_adres):
+        adress_list = []
+        for a in self.adresses:
+            adress_list.append(str(a.value))
+        if adress_list == [] or self.address == None:
+            print("The list is empty")
+        if old_adres in adress_list:
+            old_adress = Address(old_adres)
+            self.adresses.remove(old_adress)
+            new_adress = Address(new_adres)
+            self.adresses.append(new_adress)
+        else:
+            print(f"This adress {old_adres} is not in the list")
+            
+    def change_phone(self, new_num, old_num):
+        phone_list = []
+        for p in self.phone:
+            phone_list.append(str(p.value))
+        if phone_list == [] or self.phone == None:
+            print("The list is empty")
+        if old_num in phone_list:
+            old_phone = Phone(old_num)
+            self.phones.remove(old_phone)
+            new_phone = Phone(new_num)
+            self.phones.append(new_phone)
+        else:
+            print(f"This phone {old_num} is not in the list")
+            
+    def change_email(self, new_email, old_email):
+        email_list = []
+        for p in self.email:
+            email_list.append(str(p.value))
+        if email_list == [] or self.email == None:
+            print("The list is empty")
+        if old_email in email_list:
+            old_mail = Email(old_email)
+            self.emails.remove(old_mail)
+            new_mail = Email(new_email)
+            self.emails.append(new_mail)
+        else:
+            print(f"This email {old_email} is not in the list")
+            
+    def change_birthday(self, new_birthday, old_birthday):
+        if self.birthday == old_birthday:
+            self.birthday = new_birthday
+         
+    def delete_number(self, phone: Phone):
+        try:
+            self.phones.remove(phone)
+        except:
+            NameError("Number not listed")
+    
+    def delete_mail(self, mail: Email):
+        try:
+            self.emails.remove(mail)
+        except:
+            NameError("Email not listed")
+        
+    def delete_adress(self, adress: Address):
+        try:
+            self.adresses.remove(adress)
+        except:
+            NameError("Adress not listed")
+            
     def __getstate__(self):
         attributes = self.__dict__.copy()
         return attributes
