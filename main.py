@@ -175,7 +175,6 @@ class Handler:
                                         "або я спробую вгадати: ").lower()
             if action in ["1", "create", "створити", "создать"]:
                 record_contact = Record(Name(input("Введіть ФІО контакту: ")))
-                self.address_book.add_record(record_contact)
                 self.address_book.add_record(self.action_add_contact(record_contact))
             elif action in ["2", "add", "добавить", "додати"]:
                 pass
