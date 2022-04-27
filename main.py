@@ -1,3 +1,4 @@
+import pickle
 from addressbook import AddressBook
 from field import Name, Phone, Email, Address, Birthday, Note
 from sort_files import sort_folder
@@ -102,7 +103,8 @@ class Handler:
         self.menu = Menu()
         self.notes_book = notes_book
         self.address_book = address_book
-        self.main_action()
+        self.start = self.main_action()
+
 
     def main_action_note(self):
         while True:
@@ -120,7 +122,7 @@ class Handler:
             search_notes = {"3", "3.", "знайти", "search", "пошук", "найти", "шукаю"}
             edit_notes = {"4", "4.", "редагувати", "змінити", "изменить", "заменить", "edit"}
             delete_notes = {"5", "5.", "delete", "remove", "видалити", "удалить", "стерти"}
-            sor_notes = {"6", "6.", "сортувати", "sort", "сортування", "сортировка", "выдсортувати"}
+            sor_notes = {"6", "6.", "сортувати", "sort", "сортування", "сортировка", "відсортувати"}          
             close = {"7", "7.", "закрити", "вийти", "попереднє", "вихід", "выход", "повернутись", "назад"}
 
             if len(user_text & check_notes) >= 1:
@@ -138,13 +140,10 @@ class Handler:
 
             elif len(user_text & search_notes) >= 1:
                 self.notes_book.print_note_book(self.action_search_note(
-                    notes_book))
-
-            elif len(user_text & edit_notes) >= 1:
-                pass
+                    self.notes_book))
 
             elif len(user_text & delete_notes) >= 1:
-                del_notes = self.action_search_note(notes_book)
+                del_notes = self.action_search_note(self.notes_book)
                 print(f"Ви намагаєтесь видалити замітки:\n ")
                 self.notes_book.print_note_book.del_notes
                 flag_notes_delete = input("Якщо хочете видалити, напишіть"
@@ -157,8 +156,14 @@ class Handler:
 
             elif len(user_text & sor_notes) >= 1:
                 self.notes_book.sort_note()
+
+            elif len(user_text & edit_notes) >= 1:
+                pass
+
             elif len(user_text & close) >= 1:
+                self.main_action(True)
                 break
+
             else:
                 print("Ви помилились або нотаток немає")
 
@@ -180,13 +185,13 @@ class Handler:
 
             if len(user_text & id_notes) >= 1:
                 id_parametr = input('Введіть id нотатки: ').lower()
-                return notes_book.search_parametr_note("id", id_parametr)
+                self.notes_book.search_parametr_note("id", id_parametr)
             elif len(user_text & teg_notes) >= 1:
                 tag_parametr = input('Введіть tag нотатки: ').lower()
-                return notes_book.search_parametr_note("tag", tag_parametr)
+                self.notes_book.search_parametr_note("tag", tag_parametr)
             elif len(user_text & head_notes) >= 1:
                 word_parametr = input('Введіть головне слово нотатки: ')
-                return notes_book.search_word_note(word_parametr)
+                self.notes_book.search_word_note(word_parametr)
             elif len(user_text & close) >= 1:
                 print("Good bye!")
                 break
@@ -242,18 +247,25 @@ class Handler:
                                          "або я спробую вгадати: ").lower()
             if command in ["телефон", "phone", "1"]:
                 name_parametr = input('Введіть ФІО контакту: ').lower()
-                return self.address_book.search_by_name(name_parametr)
+                self.address_book.search_by_name(name_parametr)
             elif command in ["exit", "close", "good bye", "4",
                                      "вихід", "выход", "повернутись"]:
                 print("Good bye!")
                 break
 
-    def main_action(self):
+    def main_action(self, start_type=False):
         while True:
-            print(self.menu.main_menu)
+            if not start_type:
+                command = input("Ви бажаєте відкрити збережені дані?: так // ні або 1-0: ")
+                if command in ["y", "yes", "так", "да", "1", "1."]:
+                    return "Yes"
 
+            print(self.menu.main_menu)
             command = input("\033[34m" + "Обери потрібну команду(1-5), "
-                                         "або я спробую вгадати: ")
+                                            "або я спробую вгадати: ")
+
+
+            
             user_text = set()
             for el in command.split(' '):
                 user_text.add(el.lower())
@@ -262,8 +274,9 @@ class Handler:
             notes = {"2", "2.", "нотатки", "нотаткы", "notes", "нотатку", "замітки", "заметки"}
             birthday = {"3", "3.", "іменниники", "імениники", "birthday", "народження", "рождения"}
             sort = {"4", "4.", "сортувати", "sorted", "відсортувати", "посортувати", "сортировка", "sort"}
-            close = {"5", "5.", "закрити", "вийти", "exit", "close", "good bye", "вихід", "выход", "завершити"}
-
+            save_info = {"5", "5.", "зберегти", "save", "збереження", "сохранение"}
+            load_info = {"6", "6.", "відкрити", "load", "відкриття", "открытие"}  
+            close = {"7", "7.", "закрити", "вийти", "exit", "close", "good bye", "вихід", "выход", "завершити"}
             check_notes = {"check", "подивитись", "посмотреть"}
             sor_notes = {"сортувати", "sort", "сортування", "сортировка", "выдсортувати"}
 
@@ -276,22 +289,55 @@ class Handler:
                 elif len(user_text & sor_notes) >= 1:
                     self.notes_book.sort_note()
                 else:
-                    self.main_action_note(self.notes_book)
+                    self.main_action_note()
 
             elif len(user_text & birthday) >= 1:
                 self.address_book.get_bd(input("Введіть клількість днів за "
                                                "яких показати іменинників? "))
 
             elif len(user_text & sort) >= 1:
-                # Dasha this need changes
-                file_path = input('Введіть шлях до файлу')
+                file_path = input('Введіть шлях до папки:')
                 sort_folder(file_path)
 
+            elif len(user_text & save_info) >= 1:
+                 self.save_data("personal_bot.bin")
+                 print("Your information saved to 'personal_bot.bin'")
+
+            elif len(user_text & load_info) >= 1:
+                 self.open_instance("personal_bot.bin")
+
             elif len(user_text & close) >= 1:
-                print("Good bye!")
-                break
+
+                action = input("Ви бажаєте зберегти дані? так,ні або ('1' - так, '0' - ні) :")
+
+                if action.lower() in ["y", "yes", "так", "да", "1"]:
+                    self.save_data("personal_bot.bin")
+                    print("Good bye")
+                    return
+                elif action.lower() in ["n", "no", "ні", "нет", "0"]:
+                    print("Дані не збережено")
+                    print("Good bye")
+                    return
+
             else:
                 print("Я Вас не зрозумів:(\nСпробуйте ще раз!")
+    
+    def save_data(self, file_name):
+        with open(file_name, "wb") as file:
+            pickle.dump(self, file)
+
+    def open_instance(self, file_name):
+        with open(file_name, "rb") as file:
+            return pickle.load(file)
+    
+    def __getstate__(self):
+        attributes = self.__dict__.copy()
+        attributes["start"] = None
+        return attributes
+
+    def __setstate__(self, value):
+        self.__dict__ = value
+        self.start = self.main_action(True)
 
 
 class Bot:
@@ -302,6 +348,9 @@ class Bot:
         self.address_book = AddressBook()
         self.handler = Handler(self.notes_book, self.address_book)
 
+        if self.handler.start == "Yes":
+            print("Here")
+            self.handler = self.handler.open_instance("personal_bot.bin")
 
 if __name__ == "__main__":
 

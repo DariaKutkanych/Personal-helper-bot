@@ -18,3 +18,10 @@ class RecordNote:
 
     def add_tag(self, tag):
         self.tag = tag
+
+    def __getstate__(self):
+        attributes = self.__dict__.copy()
+        return attributes
+
+    def __setstate__(self, value):
+        self.__dict__ = value
