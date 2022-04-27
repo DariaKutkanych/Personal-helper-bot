@@ -11,16 +11,21 @@ class Record:
         self.emails = []
         self.birthday = birthday
 
-    def add_address(self, address):
-        address_list = []
-        for a.value in self.addresses:
-            address_list.append(str(a.value))
-        if address in address_list:
-            print("This address alredy been added.")
+    def add_address(self, address = None):
+        if address:
+            address_list = []
+            for a.value in self.addresses:
+                address_list.append(str(a.value))
+            if address in address_list:
+                print("This address alredy been added.")
+            else:
+                new_address = Address(address)
+                self.addresses.append(new_address)
+                print(f"for {self.name} add address {address}.")
         else:
-            new_address = Address(address)
-            self.addresses.append(address)
-            print(f"for {self.name} add address {address}.")
+            print("You don't write adress.")
+            a = input("Please enter address. ")
+            self.add_address(a)
 
     def add_phone(self, phone):
         phones_list = []
