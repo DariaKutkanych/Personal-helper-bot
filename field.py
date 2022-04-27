@@ -23,6 +23,13 @@ class Field:
             self.__value = value
         elif type(value) == datetime.datetime:
             self.__value = value
+    
+    def __getstate__(self):
+        attributes = self.__dict__.copy()
+        return attributes
+
+    def __setstate__(self, value):
+        self.__dict__ = value
 
 
 class Name(Field):
