@@ -12,6 +12,7 @@ class AddressBook(UserDict):
         else:
             print("try add Record.")
 
+
     def get_bd(self, day=None):
         if day:
             now = datetime.datetime.now()
@@ -27,3 +28,15 @@ class AddressBook(UserDict):
         else:
             d = input("Enter for what period to show birthdays: ")
             self.get_bd(d)
+
+    def search_by_name(self, surname):
+        pass
+
+    def search_by_phone(self, number):
+        pass
+
+    def search_by_email(self, mail):
+        pass
+
+    def search_by_address(self, adres):
+        pass
