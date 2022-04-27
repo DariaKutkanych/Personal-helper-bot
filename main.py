@@ -132,7 +132,7 @@ class Handler:
                 print(f"Ви намагаєтесь видалити замітки:\n ")
                 self.notes_book.print_note_book.del_notes
                 flag_notes_delete = input("Якщо хочете видалити, напишіть"
-                                          " + або так, для безпеки видаляйте "
+                                          "так, для безпеки видаляйте "
                                           "за id: ").lower()
                 if flag_notes_delete in ["+", "так", "хочу", "го",
                                                  "yes"]:
@@ -183,7 +183,7 @@ class Handler:
             elif action in ["4", "delete", "удалить", "видалити"]:
                 pass
             elif action in ["search", "пошук", "найти", "5"]:
-                self.action_search_phone()
+                print(self.action_search_phone())
             elif action in ["всі", "вивести", "все", "6"]:
                 print(self.address_book)
             elif action in ["exit", "close", "good bye", "7",
@@ -217,7 +217,6 @@ class Handler:
                                          "або я спробую вгадати: ").lower()
             if command in ["телефон", "phone", "1"]:
                 name_parametr = input('Введіть ФІО контакту: ').lower()
-                print(self.address_book.search_by_name(name_parametr))
                 return self.address_book.search_by_name(name_parametr)
             elif command in ["exit", "close", "good bye", "4",
                                      "вихід", "выход", "повернутись"]:
