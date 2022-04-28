@@ -398,7 +398,6 @@ class Handler:
                                                   "yyyy-mm-dd: "))
             elif action in ["5", "5.", "попереднє", "вихід", "выход",
                             "повернутись", "назад"]:
-                self.main_action(True)
                 break
             else:
                 print("Я Вас не зрозумів:(\nСпробуйте ще раз!")
@@ -436,7 +435,6 @@ class Handler:
                     record.change_birthday(date_bd)
             elif action in ["5", "5.", "попереднє", "вихід", "выход",
                             "повернутись", "назад"]:
-                self.main_action(True)
                 break
             else:
                 print("Я Вас не зрозумів:(\nСпробуйте ще раз!")
@@ -471,7 +469,6 @@ class Handler:
 
             elif action in ["5", "5.", "попереднє", "вихід", "выход",
                             "повернутись", "назад"]:
-                self.main_action(True)
                 break
             else:
                 print("Я Вас не зрозумів:(\nСпробуйте ще раз!")
@@ -487,7 +484,6 @@ class Handler:
                 self.address_book.search_by_name(name_parametr)
             elif command in ["exit", "close", "good bye", "4",
                              "вихід", "выход", "повернутись"]:
-                self.main_action(True)
                 break
 
     def main_action(self, start_type=False):
@@ -522,7 +518,6 @@ class Handler:
             check_notes = {"check", "подивитись", "посмотреть"}
             sor_notes = {"сортувати", "sort", "сортування", "сортировка",
                          "выдсортувати"}
-            create = {"create", "створити", "создать", "записати"}
 
             if len(user_text & contact) >= 1:
                 self.total_actions()
