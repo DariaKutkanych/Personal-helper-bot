@@ -39,6 +39,7 @@ class Menu:
                                     ["6. Вивести всі контакти"],
                                     ["7. Повернутись в попереднє меню"]])
 
+
         return show_main_contact
 
     @property
@@ -120,6 +121,18 @@ class Menu:
                               ["2. Замітку"],
                               ["3. Повернутись в попереднє меню"]])
         return show_search
+
+    @property
+    def search_note(self):
+        show_edit = ColorTable(theme=Themes.OCEAN)
+        show_edit.field_names = [f"{18 * '-'}Як будемо шукати?{18 * '-'}"]
+        show_edit.hrules = 1
+        show_edit.align = "l"
+        show_edit.add_rows([["1. По id замітки"],
+                              ["2. По тегу замітки"],
+                              ["3. По головному слову"],
+                              ["4. Повернутись в попереднє меню"]])
+        return show_edit
 
 
 class Handler:
@@ -335,6 +348,7 @@ class Handler:
                 break
             else:
                 print("Я Вас не зрозумів:(\nСпробуйте ще раз!")
+
 
     def action_phone(self, record: Record):
         while True:
@@ -575,6 +589,7 @@ class Handler:
 class Bot:
 
     def __init__(self):
+
         self.menu = Menu()
         self.notes_book = NotesBook()
         self.address_book = AddressBook()
