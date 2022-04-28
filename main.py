@@ -187,11 +187,8 @@ class Handler:
                     print("Ви не створювали нотаток! ")
 
             elif len(user_text & edit_notes) >= 1:
-                change_note = self.notes_book.search_parametr_note("id",
-                                                                   input(
-                                                                       "Введіть "
-                                                                       "id "
-                                                                       "замітки: "))
+                id_notes = input("Введіть id замітки: ")
+                change_note = self.notes_book.search_parametr_note("id",id_notes)
                 if change_note:
                     self.action_edit_note(change_note[0])
 
