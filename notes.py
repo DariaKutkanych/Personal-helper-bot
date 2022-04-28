@@ -17,8 +17,6 @@ class NotesBook(UserDict):
             for i in data:
                 print(f"id: {i.id_record_note}, tag: {i.tag}, note: "
                       f"{i.note}")
-        elif not data:
-            print("Заміток немає")
         else:
             for keys_note in self.data.keys():
                 print(f"id: {self.data.get(keys_note).id_record_note}   "

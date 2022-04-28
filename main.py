@@ -201,10 +201,12 @@ class Handler:
 
     def action_search_note(self):
         while True:
+
+            print(self.menu.search_note)
+
             if not self.notes_book.data:
                 print("Ви не створили замітки")
                 break
-            print(self.menu.search_note)
 
             command = input("\033[34m" + "Обери потрібну команду(1-4), "
                                          "або я спробую вгадати: ")
@@ -267,7 +269,6 @@ class Handler:
                       f"ні, тисніть 3")
 
             elif len(user_text & close) >= 1:
-                self.main_action(True)
                 break
             else:
                 print("Я Вас не зрозумів:(\nСпробуйте ще раз!")
