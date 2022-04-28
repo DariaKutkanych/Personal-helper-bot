@@ -5,6 +5,7 @@ from records_note import RecordNote
 
 class NotesBook(UserDict):
 
+  
     # def __init__(self):
     #     super().__init__()
 
