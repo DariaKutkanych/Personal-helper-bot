@@ -201,7 +201,7 @@ class Handler:
 
     def action_search_note(self):
         while True:
-            if not self.address_book.data:
+            if not self.notes_book.data:
                 print("Ви не створили замітки")
                 break
             print(self.menu.search_note)
