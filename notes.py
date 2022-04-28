@@ -51,7 +51,7 @@ class NotesBook(UserDict):
         return find_all_notes
 
     def edit_note(self):
-        pass
+        print("Func in progress, please create a new one")
 
     def sort_note(self):
         self.data = dict(sorted(self.data.items(), key=lambda val:val[1].tag))

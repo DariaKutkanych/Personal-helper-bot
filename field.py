@@ -46,7 +46,7 @@ class Phone(Field):
 
     @Field.value.setter
     def value(self, new_value):
-        if len(list(new_value)) >= 11:
+        if len(new_value) >= 10:
             Field.value.fset(self, new_value)
         else:
             print(
