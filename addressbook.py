@@ -1,16 +1,23 @@
 import datetime
 from collections import UserDict
-from records import Record, Birthday, Address, Name, Phone
+from records import Record, Birthday, Address, Name, Phone, Email
 
 
 class AddressBook(UserDict):
 
-    def add_record(self, set):
-        if isinstance(set, Record):
-            self.data.__setitem__(
-                set.name, (set.addresses, set.phones, set.emails, set.birthday))
+
+    def add_record(self, record):
+
+        if self.data.get(record.name.value):
+            print(f"User name {record.name.value} already exists")
         else:
-            print("try add Record.")
+            self.data[record.name.value] = record
+            print(f"User {record.name.value} successfully added")
+        # if isinstance(set, Record):
+        #     self.data.__setitem__(
+        #         set.name, (set.addresses, set.phones, set.emails, set.birthday))
+        # else:
+        #     print("try add Record.")
 
 
     def get_bd(self, day=None):
@@ -33,27 +40,29 @@ class AddressBook(UserDict):
         result = []
 
         for user in self.data.values():
-            if list_name:
+            if not list_name:
                 if text in user.name.value:
                     result.append(user)
             else:
                 if [type for type in user.list_name if text in type.value]:
                     result.append(user)
-
-        print(result, text)
-        return result, text
+        print(result)
+        print(type(self.data.get(text)))
+        return self.data.get(text)
 
     def search_by_name(self, text):
-        self.search_by(text)
+        return self.search_by(text)
 
     def search_by_phone(self, number):
-        self.search_by(number, "phones")
+        return self.search_by(number, "phones")
 
     def search_by_email(self, mail):
-        self.search_by(mail, "emails")
+        return self.search_by(mail, "emails")
 
     def search_by_address(self, address):
-        self.search_by(address, "addresses")
+        return self.search_by(address, "addresses")
+
+    
 
     def __getstate__(self):
         attributes = self.__dict__.copy()

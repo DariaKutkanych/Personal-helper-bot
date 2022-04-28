@@ -10,6 +10,9 @@ class Record:
         self.phones = []
         self.emails = []
         self.birthday = birthday
+    
+    def __repr__(self):
+        return f"{self.name}: {self.phones}, {self.emails}, {self.addresses}, {self.birthday}"
 
     def add_address(self, address):
         address_list = []
@@ -24,8 +27,6 @@ class Record:
             
     def add_phone(self, phone):
         phones_list = []
-        for phone in self.phones:
-            phones_list.append(str(phone.value))
         if phone in phones_list:
             print("This num has already been added.")
         else:
@@ -43,6 +44,52 @@ class Record:
             new_mail = Email(mail)
             self.emails.append(new_mail)
             print(f"for {self.name} add mail {mail}.")
+    
+    def change_data(self, old, new, type_check):
+        attributes = self.__dict__
+        new_num_check = next(
+            filter(lambda x: x.value == new, attributes[type_check]), None)
+        old_num = next(filter(lambda x: x.value ==
+                       old, attributes[type_check]), None)
+
+        if not new_num_check and old_num:
+            old_num.value = new
+            print(f"Number successfully changed to {new.value}")
+        else:
+            print("Old data not registered or new data already exist")
+
+
+    def change_adress(self, new_address, old_address):
+        self.change_data(new_address, old_address, "addresses")
+
+    def change_phone(self, new_num, old_num):
+        self.change_data(new_num, old_num, "phones")
+
+    def change_email(self, new_email, old_email):
+        self.change_data(new_email, old_email, "emails")
+
+    def change_birthday(self, new_birthday):
+            self.birthday = new_birthday
+
+    def delete_data(self, info, type_check):
+        attributes = self.__dict__
+
+        num = next(filter(lambda x: x.value ==
+                   info, attributes[type_check]), None)
+        if num:
+            print(f"Phone {num.value} removed")
+            self.phone_nums.remove(num)
+        else:
+            print("Number not registered")
+
+    def delete_number(self, phone):
+        self.delete_data(phone, "phones")
+
+    def delete_mail(self, mail):
+        self.delete_data(mail, "emails")
+        
+    def delete_adress(self, address):
+       self.delete_data(address, "addresses")
 
     def add_birthday(self, bd):
         self.birthday = Birthday(bd)
