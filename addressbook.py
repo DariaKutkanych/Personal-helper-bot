@@ -33,8 +33,9 @@ class AddressBook(UserDict):
                             birthday_people[k] = str(date_val.date())
             print(birthday_people)
         else:
-            d = input("На скільки днів уперед показати іменинників?")
-            self.get_bd(d)
+            print("Неправильний формат")
+
+
 
     def search_by(self, text, list_name=None):  
         result = []
@@ -46,8 +47,6 @@ class AddressBook(UserDict):
             else:
                 if [type for type in user.list_name if text in type.value]:
                     result.append(user)
-        print(result)
-        print(type(self.data.get(text)))
         return self.data.get(text)
 
     def search_by_name(self, text):

@@ -1,4 +1,5 @@
 from field import Name, Phone, Email, Address, Birthday
+from datetime import datetime
 
 
 class Record:
@@ -12,7 +13,11 @@ class Record:
         self.birthday = birthday
     
     def __repr__(self):
-        return f"{self.name}: {self.phones}, {self.emails}, {self.addresses}, {self.birthday}"
+        if self.birthday:
+            birthday = datetime.strftime(self.birthday.value, '%Y-%m-%d')
+        else:
+            birthday = None
+        return f"{self.name}: {self.phones}, {self.emails}, {self.addresses}, {birthday}"
 
     def add_address(self, address):
         address_list = []
@@ -77,10 +82,15 @@ class Record:
         num = next(filter(lambda x: x.value ==
                    info, attributes[type_check]), None)
         if num:
-            print(f"Phone {num.value} removed")
-            self.phone_nums.remove(num)
+            print(f"Параметр {num.value} видалений")
+            if type_check == "phones":
+                self.phones.remove(num)
+            elif type_check == "emails":
+                self.emails.remove(num)
+            elif type_check == "addresses":
+                self.addresses.remove(num)
         else:
-            print("Number not registered")
+            print("Такого параметру немає")
 
     def delete_number(self, phone):
         self.delete_data(phone, "phones")

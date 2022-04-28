@@ -56,12 +56,25 @@ class Menu:
         return show_add_contact
 
     @property
+    def contact_edit_menu(self):
+        show_add_contact = ColorTable(theme=Themes.OCEAN)
+        show_add_contact.field_names = [
+            f"{18 * '-'}Що будем добавляти?{18 * '-'}"]
+        show_add_contact.hrules = 1
+        show_add_contact.align = "l"
+        show_add_contact.add_rows([["1. Телефон"],
+                                   ["2. Емейл"],
+                                   ["3. Адресу"],
+                                   ["4. Повернутись в попереднє меню"]])
+        return show_add_contact
+
+    @property
     def edit_menu(self):
         show_edit = ColorTable(theme=Themes.OCEAN)
         show_edit.field_names = [f"{18 * '-'}За яким критерієм?{18 * '-'}"]
         show_edit.hrules = 1
         show_edit.align = "l"
-        show_edit.add_rows([["1.Телефон"],
+        show_edit.add_rows([["1. Телефон"],
                             ["2. Емейл"],
                             ["3. Адресу"],
                             ["4. День народження"],
@@ -188,7 +201,8 @@ class Handler:
 
             elif len(user_text & edit_notes) >= 1:
                 id_notes = input("Введіть id замітки: ")
-                change_note = self.notes_book.search_parametr_note("id",id_notes)
+                change_note = self.notes_book.search_parametr_note("id",
+                                                                   id_notes)
                 if change_note:
                     self.action_edit_note(change_note[0])
 
@@ -302,7 +316,8 @@ class Handler:
                 self.action_add_contact(record_contact)
 
             elif len(user_text & add_data) >= 1:
-                self.action_add_contact()
+                name = input("Please enter the name of your contact ")
+                self.action_phone(self.address_book.search_by_name(name))
 
             elif len(user_text & edit_data) >= 1:
                 self.action_edit_contact()
@@ -321,61 +336,39 @@ class Handler:
             else:
                 print("Я Вас не зрозумів:(\nСпробуйте ще раз!")
 
-    def action_phone(self):
+    def action_phone(self, record: Record):
         while True:
-            print(self.menu.main_contact)
-            action = input("\033[34m" + "Обери потрібну команду(1-7), "
+            print(self.menu.contact_edit_menu)
+            action = input("\033[34m" + "Обери потрібну команду(1-5), "
                                         "або я спробую вгадати: ")
 
             user_text = set()
             for el in action.split(' '):
                 user_text.add(el.lower())
 
-            create_phone = {"1", "1.", "create", "створити", "создать",
-                            "записати"}
-            add_phone = {"2", "2.", "існуючого", "добавити до", "більше"}
-            edit_phone = {"3", "3.", "редагувати", "редактировать", "edit",
-                          "змінити"}
-            delete_phone = {"4", "4.", "удалить", "видалити", "стерти",
-                            "delete"}
-            search_phone = {"5", "5.", "search", "пошук", "найти", "знайти",
-                            "шукати"}
-            show_phone = {"6", "6.", "вивести", "показати", "всі", "подивитись"}
-            close = {"7", "7.", "закрити", "вийти", "exit", "close",
+            edit_phone = {"1", "1.", "телефон", "phone"}
+            edit_address = {"3", "3.", "адреса"}
+            edit_email = {"2", "2.", "емейл", "почта", "email"}
+            close = {"4", "4.", "закрити", "вийти", "exit", "close",
                      "попереднє", "вихід", "выход", "повернутись",
                      "назад"}
 
-            if len(user_text & create_phone) >= 1:
-                record_contact = Record(Name(input("Введіть ФІО контакту: ")))
-                self.address_book.add_record(record_contact)
-
-            elif len(user_text & add_phone) >= 1:
-                user = "Please enter name: "
-                phone = "Please enter phone: "
-                record = self.address_book.search_by_name(user)
+            if len(user_text & edit_phone) >= 1:
                 if record:
+                    phone = input("Введіть новий телефон: ")
                     record.add_phone(phone)
 
-            elif len(user_text & edit_phone) >= 1:
-                user = "Please enter name: "
-                phone = "Please enter phone: "
-                record = self.address_book.search_by_name(user)
+            elif len(user_text & edit_address) >= 1:
                 if record:
-                    record.change_phone(phone)
+                    address = input("Введіть нову адресу: ")
+                    record.add_address(address)
 
-            elif len(user_text & delete_phone) >= 1:
-                user = "Please enter name: "
-                phone = "Please enter phone: "
-                record = self.address_book.search_by_name(user)
+            elif len(user_text & edit_email) >= 1:
                 if record:
-                    record.delete_number(phone)
+                    address = input("Введіть новий email: ")
+                    record.add_mail(address)
 
-            elif len(user_text & search_phone) >= 1:
-                print(self.action_search_phone())
-            elif len(user_text & show_phone) >= 1:
-                print(self.address_book)
             elif len(user_text & close) >= 1:
-                self.main_action(True)
                 break
             else:
                 print("Я Вас не зрозумів:(\nСпробуйте ще раз!")
@@ -443,7 +436,6 @@ class Handler:
     def action_delete_contact(self):
         user = input("Please enter name: ")
         while True:
-            print("Choose contact name: ")
             print(self.menu.edit_menu)
             action = input("\033[34m" + "Обери потрібну команду(1-5), "
                                         "або я спробую вгадати: ").lower()
@@ -463,7 +455,7 @@ class Handler:
                 address = input("Please enter address: ")
                 record = self.address_book.search_by_name(user)
                 if record:
-                    record.delete_address(address)
+                    record.delete_adress(address)
             elif action in ["4", "дата", "рождение"]:
                 print("You can only modify this data")
 
@@ -531,8 +523,9 @@ class Handler:
                     self.main_action_note()
 
             elif len(user_text & birthday) >= 1:
-                self.address_book.get_bd(input("Введіть клількість днів за "
-                                               "яких показати іменинників? "))
+                birth = input("Введіть клількість днів за "
+                              "яких показати іменинників? ")
+                self.address_book.get_bd(birth)
 
             elif len(user_text & sort) >= 1:
                 file_path = input('Введіть шлях до папки:')
