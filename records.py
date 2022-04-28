@@ -14,22 +14,17 @@ class Record:
     def __repr__(self):
         return f"{self.name}: {self.phones}, {self.emails}, {self.addresses}, {self.birthday}"
 
-    def add_address(self, address=None):
-        if address:
-            address_list = []
-            for address in self.addresses:
-                address_list.append(str(address.value))
-            if address in address_list:
-                print("This address has alredy been added.")
-            else:
-                new_address = Address(address)
-                self.addresses.append(new_address)
-                print(f"for {self.name} add address {address}.")
+    def add_address(self, address):
+        address_list = []
+        for address in self.addresses:
+            address_list.append(str(address.value))
+        if address in address_list:
+            print("This address alredy been added.")
         else:
-            print("You didn't write an adress.")
-            a = input("Please enter address. ")
-            self.add_address(a)
-
+            new_address = Address(address)
+            self.addresses.append(new_address)
+            print(f"for {self.name} add address {address}.")
+            
     def add_phone(self, phone):
         phones_list = []
         if phone in phones_list:
